@@ -1,0 +1,211 @@
+
+  󱑍 15:56    devtopc   kubernetes-training-20240131\docker\build3    master !++29  podman run -it 8f434c4536875beb75985b
+/osman # ls
+help.md  xyz.txt
+/osman # mc
+
+/osman # exit
+
+  󱑍 16:03    devtopc   kubernetes-training-20240131\docker\build3    master   cd ..
+
+  󱑍 16:04    devtopc   kubernetes-training-20240131\docker    master   cd ..
+
+  󱑍 16:04    devtopc   kubernetes-training-20240131    master   cd .\spring-proj\
+
+  󱑍 16:04    devtopc   kubernetes-training-20240131\spring-proj    master   podman build --tag spring-project:v1.0.0 .
+STEP 1/6: FROM openjdk:21-jdk-slim
+Resolving "openjdk" using unqualified-search registries (/etc/containers/registries.conf.d/999-podman-machine.conf)
+Trying to pull docker.io/library/openjdk:21-jdk-slim...
+Getting image source signatures
+Copying blob sha256:af800cd8441e394f9ec3832393ff933c52e165c0965089937e3fb16ea395ea19
+Copying blob sha256:a803e7c4b030119420574a882a52b6431e160fceb7620f61b525d49bc2d58886
+Copying blob sha256:b4972576c83dad66aa1e4f6d08e74f9e551e721a7cb2dc5370fe8da1af5b11e8
+Copying config sha256:a48f4cb737303e18b873b859fa7b779610a67a01e2d33c0b453d05fc1a4bb7b0
+Writing manifest to image destination
+STEP 2/6: MAINTAINER "osman@osman.com"
+--> 16d7bbac7db0
+STEP 3/6: WORKDIR /spring_proj
+--> 57dee0b02b49
+STEP 4/6: COPY ./target/spring-proj-1.0.0.jar spring-proj-1.0.0.jar
+--> e19cdf016633
+STEP 5/6: ENV LOCAL_PORT=8080
+--> b2fb40ddc596
+STEP 6/6: ENTRYPOINT ["sh","-c","java -DMY_PORT=${LOCAL_PORT} -jar spring-proj-1.0.0.jar"]
+COMMIT spring-project:v1.0.0
+--> 433b8cabba97
+Successfully tagged localhost/spring-project:v1.0.0
+433b8cabba97d0dd20109739dd3183c6681b6b838c5177c29870c4bc5ab8a168
+
+  󱑍 16:05    devtopc   kubernetes-training-20240131\spring-proj    master   podman images
+REPOSITORY                           TAG           IMAGE ID      CREATED        SIZE
+localhost/spring-project             v1.0.0        433b8cabba97  9 hours ago    466 MB
+localhost/osman-alpine               v1.0.2        8f434c453687  9 hours ago    20.8 MB
+localhost/osman-alpine               v1.0.1        8c8f21eec63b  9 hours ago    20.8 MB
+localhost/osman-alpine               v1.0.0        0f8bdfca28a4  9 hours ago    20.8 MB
+localhost/osman/alpine-mc            latest        9835970e738d  11 hours ago   20.8 MB
+docker.io/library/alpine             3.18          d3782b16ccc9  4 days ago     7.63 MB
+docker.io/library/alpine             latest        05455a08881e  4 days ago     7.67 MB
+docker.io/library/nginx              latest        a8758716bb6a  3 months ago   191 MB
+docker.io/library/openjdk            21-jdk-slim   a48f4cb73730  4 months ago   443 MB
+docker.io/provectuslabs/kafka-ui     latest        7270929fd871  7 months ago   291 MB
+docker.io/confluentinc/cp-kafka      7.3.2         da23a46211ad  11 months ago  845 MB
+docker.io/confluentinc/cp-zookeeper  7.2.1         3f28db6a433d  18 months ago  792 MB
+docker.io/library/openjdk            8-jdk-alpine  a3562aa0b991  4 years ago    106 MB
+
+  󱑍 16:05    devtopc   kubernetes-training-20240131\spring-proj    master   podman run -rm -p 8888:7676 -e LOCAL_PORT=7676 --name spring1 --network mynet1 433b8cabba97
+Error: unknown shorthand flag: 'r' in -rm
+See 'podman.exe run --help'
+
+  󱑍 16:08    devtopc   kubernetes-training-20240131\spring-proj    master ✗  podman run --rm -p 8888:7676 -e LOCAL_PORT=7676 --name spring1 --network mynet1 433b8cabba97
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.2)
+
+2024-01-31T04:04:19.090Z  INFO 2 --- [           main] t.k.springproj.SpringProjApplication     : Starting SpringProjApplication v1.0.0 using Java 21 with PID 2 (/spring_proj/spring-proj-1.0.0.jar started by root in /spring_proj)
+2024-01-31T04:04:19.091Z  INFO 2 --- [           main] t.k.springproj.SpringProjApplication     : No active profile set, falling back to 1 default profile: "default"
+2024-01-31T04:04:19.872Z  INFO 2 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 7676 (http)
+2024-01-31T04:04:19.879Z  INFO 2 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-01-31T04:04:19.879Z  INFO 2 --- [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.18]
+2024-01-31T04:04:19.896Z  INFO 2 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-01-31T04:04:19.896Z  INFO 2 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 758 ms
+2024-01-31T04:04:20.232Z  INFO 2 --- [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint(s) beneath base path '/actuator'
+2024-01-31T04:04:20.267Z  INFO 2 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 7676 (http) with context path ''
+2024-01-31T04:04:20.279Z  INFO 2 --- [           main] t.k.springproj.SpringProjApplication     : Started SpringProjApplication in 1.43 seconds (process running for 1.714)
+
+  󱑍 16:10    devtopc   kubernetes-training-20240131\spring-proj    master ✗  podman run -d --rm -p 8888:7676 -e LOCAL_PORT=7676 --name spring1 --network mynet1 433b8cabba97
+937f540df798f50f25d226ee8758ff39d513bae0e94e39ba6cec98034dbcebf4
+
+  󱑍 16:12    devtopc   kubernetes-training-20240131\spring-proj    master !++162  podman run -d --rm -p 8889:7676 -e LOCAL_PORT=7676 --name spring2 --network mynet1 433b8cabba97
+1e5ae2996d0297eac911a89f6296d5d1406fe7e1d6ccd91ebe392efcf7455dab
+
+  󱑍 16:13    devtopc   kubernetes-training-20240131\spring-proj    master !++162  podman ps -a
+CONTAINER ID  IMAGE                                      COMMAND               CREATED       STATUS                    PORTS
+                      NAMES
+be584132f962  docker.io/library/nginx:latest             nginx -g daemon o...  11 hours ago  Up 11 hours               0.0.0.0:9090->80/tcp                              silly_thompson
+27963c45a8cc  docker.io/library/nginx:latest             nginx -g daemon o...  11 hours ago  Up 11 hours               0.0.0.0:9091->80/tcp                              modest_wing
+3af2ade63066  docker.io/confluentinc/cp-zookeeper:7.2.1  /etc/confluent/do...  11 hours ago  Exited (143) 9 hours ago  0.0.0.0:2181->2181/tcp                            zoo1
+a8e450bd0dce  docker.io/confluentinc/cp-kafka:7.3.2      /etc/confluent/do...  11 hours ago  Exited (137) 9 hours ago  0.0.0.0:9093->9093/tcp, 0.0.0.0:29093->29093/tcp  kafka2
+c78147004eb9  docker.io/confluentinc/cp-kafka:7.3.2      /etc/confluent/do...  11 hours ago  Exited (143) 9 hours ago  0.0.0.0:9092->9092/tcp, 0.0.0.0:29092->29092/tcp  kafka1
+ae8d95f4490c  docker.io/confluentinc/cp-kafka:7.3.2      /etc/confluent/do...  11 hours ago  Exited (143) 9 hours ago  0.0.0.0:9094->9094/tcp, 0.0.0.0:29094->29094/tcp  kafka3
+b8ac1524aa0f  docker.io/provectuslabs/kafka-ui:latest    /bin/sh -c java -...  11 hours ago  Exited (143) 9 hours ago  0.0.0.0:8088->8080/tcp                            kafka-ui
+9b7eb685482e  docker.io/library/alpine:latest            sh                    10 hours ago  Up 10 hours
+                      trusting_banach
+f09d6b2a2c5b  docker.io/library/alpine:latest            sh                    10 hours ago  Exited (0) 9 hours ago
+                      alpine2
+6312bf330a55  localhost/osman-alpine:v1.0.0                                    9 hours ago   Exited (0) 9 hours ago
+                      nice_euler
+4f55bb4136e0  localhost/osman-alpine:v1.0.1                                    9 hours ago   Exited (0) 9 hours ago
+                      hardcore_engelbart
+3f2b04fae7df  localhost/osman-alpine:v1.0.2                                    9 hours ago   Exited (0) 9 hours ago
+                      modest_booth
+937f540df798  localhost/spring-project:v1.0.0                                  9 hours ago   Up 9 hours                0.0.0.0:8888->7676/tcp                            spring1
+1e5ae2996d02  localhost/spring-project:v1.0.0                                  9 hours ago   Up 9 hours                0.0.0.0:8889->7676/tcp                            spring2
+
+  󱑍 16:16    devtopc   kubernetes-training-20240131\spring-proj    master !++162  podman conta
+Error: unrecognized command `podman.exe conta`
+
+Did you mean this?
+        container
+
+Try 'podman.exe --help' for more information
+
+  󱑍 16:16    devtopc   kubernetes-training-20240131\spring-proj    master !++162✗  podman container prune
+WARNING! This will remove all non running containers.
+Are you sure you want to continue? [y/N] y
+3af2ade6306660fc13a53de48c941b5007e4e063f9e776f96519ecff04246cfc
+a8e450bd0dcefc2d1e0600c0177de8cbed0ecde22935e0674ad9dffea5746c37
+c78147004eb9e3263bbef3c63853f83ccf35f9ca2d42c02cd4f36892bb538a95
+ae8d95f4490c887997622699c62c94ba9ace5ae5b7ae1e5bd27cde8160138d85
+b8ac1524aa0f6e4922e42efaa4f2bf1326cbed0686d64496f71383ce7beadd11
+f09d6b2a2c5b48b9741b1d552030915e784f2cd5895c89ca2f8292a56127d423
+6312bf330a551277077bfe5fc80c4fb9b0c8a78c6cb87272e5b0684ddc4c9c66
+4f55bb4136e03ca81367e2fcf2d8ddcdb8c2c7e2b4c34a77b69e5c9b065d7a2f
+3f2b04fae7dfad5f5f5faf1642c7d6d8ffde784e435839aea47614ae895e7e83
+
+  󱑍 16:16    devtopc   kubernetes-training-20240131\spring-proj    master !++162  podman volume ls
+DRIVER      VOLUME NAME
+local       redis_cache
+local       buildx_buildkit_default_state
+local       879b6a321ced9e647b0710e7a747c11f7747027494a418f706e932b6b6dda331
+local       982731b99e37a735d05a437c540d862f82068a19c7632c7c27d4ca3dd55d86be
+local       8b261950c1922d43a9ebec5e545bd774483e6648104449dcfc1de2f79e331f13
+local       b261b28526ff7b180381b5646c030da7d7ebb5b29906f67c35e5e3c17686ec81
+local       2d5187b5f8af47b733dc1d74a5efbd26d325524f9f2f27823bcff73a432cc412
+local       1afc193cbad5d11890ff240047c2a5247a33d463a880beafc984913940f9d12e
+local       018c38415e3b0133d4b09860e346c394098feb897df4a5419aac106f4be62cb2
+local       66bd7057f0d23c5bbc4402b558a88a8fba803a285cd8d490709df4cbba15d454
+local       d1cda6a6d58a922921f5ee23ae4796dafabac98669dea8dfca0630aaa2a7d12b
+local       f49626903e17a30cbefeb2942b6e0bf8708392be148b6c49cd7a0530fdb78215
+local       5e4bd118bad5bcc65a5cdd40a55ef75f85072c0a1744583444cdcb39eb8a9e2a
+local       24e88799fcf77973689ce640f4615498bc697db998a0eb7dea4dcd30ce199610
+local       38fde58a37c55ce19a4ed96ecd740570d0bba11192a779e7b59d20e050cc28e1
+local       db9a7b22b8c7da08e55280936a695bb3875dabe0540d482f78e92ce45c5786d5
+local       706ec102e174b499314a68c194c3b1a27ab98389ffc73e80cb8b321edcf54b75
+local       0c2a6f006db06be08366ad3732cce60dbf8ecf1c06ca05d491dc584079e9df22
+local       6df0ccc66fd2f01a1216f520efc6c59d1341efb7f7173d9381635b93fc0e136b
+local       a33ce661a56bc508e00150d4dfffac55bff8b5d0b0dd65acdbfedb4215d9b224
+
+  󱑍 16:17    devtopc   kubernetes-training-20240131\spring-proj    master !++162  podman network ls
+NETWORK ID    NAME           DRIVER
+4ce2a9ea496f  kafka_default  bridge
+26ad34939cb1  mynet1         bridge
+2f259bab93aa  podman         bridge
+
+  󱑍 16:17    devtopc   kubernetes-training-20240131\spring-proj    master !++162  podman volume prune
+WARNING! This will remove all volumes not used by at least one container. The following volumes will be removed:
+redis_cache
+buildx_buildkit_default_state
+879b6a321ced9e647b0710e7a747c11f7747027494a418f706e932b6b6dda331
+982731b99e37a735d05a437c540d862f82068a19c7632c7c27d4ca3dd55d86be
+8b261950c1922d43a9ebec5e545bd774483e6648104449dcfc1de2f79e331f13
+b261b28526ff7b180381b5646c030da7d7ebb5b29906f67c35e5e3c17686ec81
+2d5187b5f8af47b733dc1d74a5efbd26d325524f9f2f27823bcff73a432cc412
+1afc193cbad5d11890ff240047c2a5247a33d463a880beafc984913940f9d12e
+018c38415e3b0133d4b09860e346c394098feb897df4a5419aac106f4be62cb2
+66bd7057f0d23c5bbc4402b558a88a8fba803a285cd8d490709df4cbba15d454
+d1cda6a6d58a922921f5ee23ae4796dafabac98669dea8dfca0630aaa2a7d12b
+f49626903e17a30cbefeb2942b6e0bf8708392be148b6c49cd7a0530fdb78215
+5e4bd118bad5bcc65a5cdd40a55ef75f85072c0a1744583444cdcb39eb8a9e2a
+24e88799fcf77973689ce640f4615498bc697db998a0eb7dea4dcd30ce199610
+38fde58a37c55ce19a4ed96ecd740570d0bba11192a779e7b59d20e050cc28e1
+db9a7b22b8c7da08e55280936a695bb3875dabe0540d482f78e92ce45c5786d5
+706ec102e174b499314a68c194c3b1a27ab98389ffc73e80cb8b321edcf54b75
+0c2a6f006db06be08366ad3732cce60dbf8ecf1c06ca05d491dc584079e9df22
+6df0ccc66fd2f01a1216f520efc6c59d1341efb7f7173d9381635b93fc0e136b
+a33ce661a56bc508e00150d4dfffac55bff8b5d0b0dd65acdbfedb4215d9b224
+Are you sure you want to continue? [y/N] y
+redis_cache
+buildx_buildkit_default_state
+879b6a321ced9e647b0710e7a747c11f7747027494a418f706e932b6b6dda331
+982731b99e37a735d05a437c540d862f82068a19c7632c7c27d4ca3dd55d86be
+8b261950c1922d43a9ebec5e545bd774483e6648104449dcfc1de2f79e331f13
+b261b28526ff7b180381b5646c030da7d7ebb5b29906f67c35e5e3c17686ec81
+2d5187b5f8af47b733dc1d74a5efbd26d325524f9f2f27823bcff73a432cc412
+1afc193cbad5d11890ff240047c2a5247a33d463a880beafc984913940f9d12e
+018c38415e3b0133d4b09860e346c394098feb897df4a5419aac106f4be62cb2
+66bd7057f0d23c5bbc4402b558a88a8fba803a285cd8d490709df4cbba15d454
+d1cda6a6d58a922921f5ee23ae4796dafabac98669dea8dfca0630aaa2a7d12b
+f49626903e17a30cbefeb2942b6e0bf8708392be148b6c49cd7a0530fdb78215
+5e4bd118bad5bcc65a5cdd40a55ef75f85072c0a1744583444cdcb39eb8a9e2a
+24e88799fcf77973689ce640f4615498bc697db998a0eb7dea4dcd30ce199610
+38fde58a37c55ce19a4ed96ecd740570d0bba11192a779e7b59d20e050cc28e1
+db9a7b22b8c7da08e55280936a695bb3875dabe0540d482f78e92ce45c5786d5
+706ec102e174b499314a68c194c3b1a27ab98389ffc73e80cb8b321edcf54b75
+0c2a6f006db06be08366ad3732cce60dbf8ecf1c06ca05d491dc584079e9df22
+6df0ccc66fd2f01a1216f520efc6c59d1341efb7f7173d9381635b93fc0e136b
+a33ce661a56bc508e00150d4dfffac55bff8b5d0b0dd65acdbfedb4215d9b224
+
+  󱑍 16:18    devtopc   kubernetes-training-20240131\spring-proj    master !++162  podman ps
+CONTAINER ID  IMAGE                            COMMAND               CREATED       STATUS       PORTS                   NAMES
+be584132f962  docker.io/library/nginx:latest   nginx -g daemon o...  11 hours ago  Up 11 hours  0.0.0.0:9090->80/tcp    silly_thompson
+27963c45a8cc  docker.io/library/nginx:latest   nginx -g daemon o...  11 hours ago  Up 11 hours  0.0.0.0:9091->80/tcp    modest_wing
+9b7eb685482e  docker.io/library/alpine:latest  sh                    10 hours ago  Up 10 hours                          trusting_banach
+937f540df798  localhost/spring-project:v1.0.0                        9 hours ago   Up 9 hours   0.0.0.0:8888->7676/tcp  spring1
+1e5ae2996d02  localhost/spring-project:v1.0.0                        9 hours ago   Up 9 hours   0.0.0.0:8889->7676/tcp  spring2
+
+  󱑍 16:18    devtopc   kubernetes-training-20240131\spring-proj    master !++162

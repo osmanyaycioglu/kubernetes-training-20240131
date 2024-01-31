@@ -1,0 +1,162 @@
+
+  󱑍 15:50    devtopc   kubernetes-training-20240131\docker\build1    master !++23  podman container prune
+WARNING! This will remove all non running containers.
+Are you sure you want to continue? [y/N] y
+dafdf880fd8ca28599c98daf5196a06cc82b4560d691529f2d9f41d483b27113
+4dec930e13ef1dde3cd71775e3bf4a20fd1f4de029b4bf4e4c9a7638bab053ef
+3346f48a9b7b708d313b7537c25b6ab400008d8b1579fb8cabd8017b97cca243
+
+  󱑍 15:50    devtopc   kubernetes-training-20240131\docker\build1    master !++23  podman build --tag osman-alpine:v1.0.1 .
+STEP 1/7: FROM alpine:latest
+STEP 2/7: LABEL authors="os2ma"
+--> Using cache 9a71fbe5b7e96a4d8bac98ec505aaf81bbee42a552a8561f983fa6bfe7355e79
+--> 9a71fbe5b7e9
+STEP 3/7: RUN apk update
+--> Using cache 68632081cbccdcdc4ffdcef75bdc504606dc61cb4060d8f73deaa6615743b214
+--> 68632081cbcc
+STEP 4/7: RUN apk add mc
+--> Using cache 953649858627c1d774859282f74c8e59c1a277aa76c84b72d451267d08242943
+--> 953649858627
+STEP 5/7: WORKDIR /osman
+--> 79f187e71584
+STEP 6/7: COPY myfile.txt xyz.txt
+--> 0cd554452458
+STEP 7/7: ENTRYPOINT ["sh"]
+COMMIT osman-alpine:v1.0.1
+--> 8c8f21eec63b
+Successfully tagged localhost/osman-alpine:v1.0.1
+8c8f21eec63bafdde51396f19071e7c667693945a182fb352fddab1ed72fa9cc
+
+  󱑍 15:52    devtopc   kubernetes-training-20240131\docker\build1    master !++26  podman run -it 0f8bdfca28a4
+/ # mc
+
+/ # exit
+
+  󱑍 15:53    devtopc   kubernetes-training-20240131\docker\build1    master !++26  podman images
+REPOSITORY                           TAG           IMAGE ID      CREATED        SIZE
+localhost/osman-alpine               v1.0.1        8c8f21eec63b  9 hours ago    20.8 MB
+localhost/osman-alpine               v1.0.0        0f8bdfca28a4  9 hours ago    20.8 MB
+localhost/osman/alpine-mc            latest        9835970e738d  11 hours ago   20.8 MB
+docker.io/library/alpine             3.18          d3782b16ccc9  4 days ago     7.63 MB
+docker.io/library/alpine             latest        05455a08881e  4 days ago     7.67 MB
+docker.io/library/nginx              latest        a8758716bb6a  3 months ago   191 MB
+docker.io/provectuslabs/kafka-ui     latest        7270929fd871  7 months ago   291 MB
+docker.io/confluentinc/cp-kafka      7.3.2         da23a46211ad  11 months ago  845 MB
+docker.io/confluentinc/cp-zookeeper  7.2.1         3f28db6a433d  18 months ago  792 MB
+docker.io/library/openjdk            8-jdk-alpine  a3562aa0b991  4 years ago    106 MB
+
+  󱑍 15:53    devtopc   kubernetes-training-20240131\docker\build1    master !++26  podman run -it 8c8f21eec63b
+/osman # ls
+xyz.txt
+/osman # mc
+
+/osman # exit
+
+  󱑍 15:54    devtopc   kubernetes-training-20240131\docker\build1    master !++26  cd ..
+
+  󱑍 15:55    devtopc   kubernetes-training-20240131\docker    master !++29  cd .\build3\
+
+  󱑍 15:56    devtopc   kubernetes-training-20240131\docker\build3    master !++29  ls
+
+
+    Directory: C:\Users\os2ma\git\kubernetes-training-20240131\docker\build3
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a----         1/31/2024   3:55 PM             87 Dockerfile
+-a----         1/22/2024   3:35 PM           1256 HELP.md
+
+
+
+  󱑍 15:56    devtopc   kubernetes-training-20240131\docker\build3    master !++29  podman build --tag osman-alpine:v1.0.2 .
+STEP 1/4: FROM osman-alpine:v1.0.1
+STEP 2/4: WORKDIR /osman
+--> 322f7a1495ac
+STEP 3/4: COPY HELP.md help.md
+--> 7d65e87c2e40
+STEP 4/4: ENTRYPOINT ["sh"]
+COMMIT osman-alpine:v1.0.2
+--> 8f434c453687
+Successfully tagged localhost/osman-alpine:v1.0.2
+8f434c4536875beb75985bda0443770eb0535cb8078e175f1a8f037503fabd4d
+
+  󱑍 15:56    devtopc   kubernetes-training-20240131\docker\build3    master !++29  podman run -it 8f434c4536875beb75985b
+/osman # ls
+help.md  xyz.txt
+/osman # mc
+
+/osman # exit
+
+  󱑍 16:03    devtopc   kubernetes-training-20240131\docker\build3    master   cd ..
+
+  󱑍 16:04    devtopc   kubernetes-training-20240131\docker    master   cd ..
+
+  󱑍 16:04    devtopc   kubernetes-training-20240131    master   cd .\spring-proj\
+
+  󱑍 16:04    devtopc   kubernetes-training-20240131\spring-proj    master   podman build --tag spring-project:v1.0.0 .
+STEP 1/6: FROM openjdk:21-jdk-slim
+Resolving "openjdk" using unqualified-search registries (/etc/containers/registries.conf.d/999-podman-machine.conf)
+Trying to pull docker.io/library/openjdk:21-jdk-slim...
+Getting image source signatures
+Copying blob sha256:af800cd8441e394f9ec3832393ff933c52e165c0965089937e3fb16ea395ea19
+Copying blob sha256:a803e7c4b030119420574a882a52b6431e160fceb7620f61b525d49bc2d58886
+Copying blob sha256:b4972576c83dad66aa1e4f6d08e74f9e551e721a7cb2dc5370fe8da1af5b11e8
+Copying config sha256:a48f4cb737303e18b873b859fa7b779610a67a01e2d33c0b453d05fc1a4bb7b0
+Writing manifest to image destination
+STEP 2/6: MAINTAINER "osman@osman.com"
+--> 16d7bbac7db0
+STEP 3/6: WORKDIR /spring_proj
+--> 57dee0b02b49
+STEP 4/6: COPY ./target/spring-proj-1.0.0.jar spring-proj-1.0.0.jar
+--> e19cdf016633
+STEP 5/6: ENV LOCAL_PORT=8080
+--> b2fb40ddc596
+STEP 6/6: ENTRYPOINT ["sh","-c","java -DMY_PORT=${LOCAL_PORT} -jar spring-proj-1.0.0.jar"]
+COMMIT spring-project:v1.0.0
+--> 433b8cabba97
+Successfully tagged localhost/spring-project:v1.0.0
+433b8cabba97d0dd20109739dd3183c6681b6b838c5177c29870c4bc5ab8a168
+
+  󱑍 16:05    devtopc   kubernetes-training-20240131\spring-proj    master   podman images
+REPOSITORY                           TAG           IMAGE ID      CREATED        SIZE
+localhost/spring-project             v1.0.0        433b8cabba97  9 hours ago    466 MB
+localhost/osman-alpine               v1.0.2        8f434c453687  9 hours ago    20.8 MB
+localhost/osman-alpine               v1.0.1        8c8f21eec63b  9 hours ago    20.8 MB
+localhost/osman-alpine               v1.0.0        0f8bdfca28a4  9 hours ago    20.8 MB
+localhost/osman/alpine-mc            latest        9835970e738d  11 hours ago   20.8 MB
+docker.io/library/alpine             3.18          d3782b16ccc9  4 days ago     7.63 MB
+docker.io/library/alpine             latest        05455a08881e  4 days ago     7.67 MB
+docker.io/library/nginx              latest        a8758716bb6a  3 months ago   191 MB
+docker.io/library/openjdk            21-jdk-slim   a48f4cb73730  4 months ago   443 MB
+docker.io/provectuslabs/kafka-ui     latest        7270929fd871  7 months ago   291 MB
+docker.io/confluentinc/cp-kafka      7.3.2         da23a46211ad  11 months ago  845 MB
+docker.io/confluentinc/cp-zookeeper  7.2.1         3f28db6a433d  18 months ago  792 MB
+docker.io/library/openjdk            8-jdk-alpine  a3562aa0b991  4 years ago    106 MB
+
+  󱑍 16:05    devtopc   kubernetes-training-20240131\spring-proj    master   podman run -rm -p 8888:7676 -e LOCAL_PORT=7676 --name spring1 --network mynet1 433b8cabba97
+Error: unknown shorthand flag: 'r' in -rm
+See 'podman.exe run --help'
+
+  󱑍 16:08    devtopc   kubernetes-training-20240131\spring-proj    master ✗  podman run --rm -p 8888:7676 -e LOCAL_PORT=7676 --name spring1 --network mynet1 433b8cabba97
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.2)
+
+2024-01-31T04:04:19.090Z  INFO 2 --- [           main] t.k.springproj.SpringProjApplication     : Starting SpringProjApplication v1.0.0 using Java 21 with PID 2 (/spring_proj/spring-proj-1.0.0.jar started by root in /spring_proj)
+2024-01-31T04:04:19.091Z  INFO 2 --- [           main] t.k.springproj.SpringProjApplication     : No active profile set, falling back to 1 default profile: "default"
+2024-01-31T04:04:19.872Z  INFO 2 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 7676 (http)
+2024-01-31T04:04:19.879Z  INFO 2 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-01-31T04:04:19.879Z  INFO 2 --- [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.18]
+2024-01-31T04:04:19.896Z  INFO 2 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-01-31T04:04:19.896Z  INFO 2 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 758 ms
+2024-01-31T04:04:20.232Z  INFO 2 --- [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint(s) beneath base path '/actuator'
+2024-01-31T04:04:20.267Z  INFO 2 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 7676 (http) with context path ''
+2024-01-31T04:04:20.279Z  INFO 2 --- [           main] t.k.springproj.SpringProjApplication     : Started SpringProjApplication in 1.43 seconds (process running for 1.714)
+
+  󱑍 16:10    devtopc   kubernetes-training-20240131\spring-proj    master ✗
