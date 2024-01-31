@@ -5,21 +5,18 @@
   <groupId>training.kubernetes</groupId>
   <artifactId>kubernetes-training-20240131</artifactId>
   <version>1.0.0</version>
-  <packaging>jar</packaging>
+  <packaging>pom</packaging>
 
   <name>kubernetes-training-20240131</name>
   <url>http://maven.apache.org</url>
 
+  <modules>
+    <module>spring-proj</module>
+  </modules>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
   <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
 </project>

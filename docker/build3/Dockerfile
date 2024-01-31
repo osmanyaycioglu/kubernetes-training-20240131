@@ -1,0 +1,12 @@
+FROM osman-alpine:v1.0.1
+
+WORKDIR /osman
+
+COPY HELP.md help.md
+
+ENV TEST_ENV1=osman
+ENV TEST_ENV2=9090
+
+EXPOSE 7070
+
+ENTRYPOINT ["sh"]

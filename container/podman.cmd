@@ -36,6 +36,18 @@ podman diff a7afcb989a9c
 
 podman run -d -p 9090:80 docker.io/library/nginx:latest
 
+podman compose down
+podman compose -f ./docker-compose.yml up -d
+
+podman run -d -it -e OSMAN=123456 docker.io/library/alpine sh
+podman run -it -e OSMAN=123456 -e TEST=ABC --name alpine2 docker.io/library/alpine sh
+
+podman network create mynet1
+
+podman run -it -e OSMAN=123456 -e TEST=ABC --name alpine1 --network mynet1 docker.io/library/alpine sh
+podman run -it -e OSMAN=123456 -e TEST=ABC --name alpine2 --network mynet1 docker.io/library/alpine sh
+
+
 
 
 
