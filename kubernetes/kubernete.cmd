@@ -7,3 +7,5 @@ minikube status
 minikube addons list
 
 kubectl get pods -n kube-system
+
+kind create cluster --config=kind-cluster.yaml
