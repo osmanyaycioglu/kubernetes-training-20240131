@@ -7,8 +7,8 @@ podman container top 95a9885aa1bf
 
 podman system prune
 
-docker container ls -a
-docker ps -a
+podman container ls -a
+podman ps -a
 
 podman rmi -f e96e0cf3c9ae
 
@@ -47,7 +47,20 @@ podman network create mynet1
 podman run -it -e OSMAN=123456 -e TEST=ABC --name alpine1 --network mynet1 docker.io/library/alpine sh
 podman run -it -e OSMAN=123456 -e TEST=ABC --name alpine2 --network mynet1 docker.io/library/alpine sh
 
+podman run -it -p 8080:80 -e OSMAN=123456 -e TEST=ABC --name alpine2 --network mynet1 docker.io/library/alpine sh
 
+podman volume ls
+podman system df
 
+podman run -it -p 8080:80 -e OSMAN=123456 -e TEST=ABC --name alpine2 --network mynet1 -v my-vol1:/usr/osman docker.io/library/alpine sh
 
+podman run -it -p 8085:80 -e OSMAN=123456 -e TEST=ABC --name alpine5 --network mynet1 -v my-vol1:/usr/osman:ro docker.io/library/alpine sh
+
+podman run -it --network mynet1 -v my-vol1:/usr/osman:ro docker.io/library/alpine sh
+
+podman run -it --network mynet1 -v c:/docker:/usr/docker docker.io/library/alpine sh
+
+podman volume create test1
+podman volume rm test1
+podman volume prune
 
