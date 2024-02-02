@@ -22,3 +22,22 @@ kubectl get pods -o wide
 
 kubectl exec -it nginx-pod -- sh
 
+kubectl edit deployment nginx-deployment
+
+kubectl get deployment nginx-deployment -o yaml > current-dep.yaml
+
+kubectl delete -f .\nginx-dep.yaml
+
+kubectl get pods -w
+
+kubectl get nodes --show_labels
+
+kubectl rollout undo deployment nginx-deployment
+kubectl rollout history deployment nginx-deployment
+kubectl rollout undo deployment nginx-deployment --to-revision=2
+kubectl rollout history deployment nginx-deployment --revision=3
+
+kubectl get ep
+kubectl get endpoints
+
+ minikube service nginx-deployment-svc --url
