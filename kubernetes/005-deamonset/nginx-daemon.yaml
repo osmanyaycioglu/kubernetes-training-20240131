@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: nginx-daemon
+  labels:
+    app: nginx-daemon-pod
+spec:
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      app: nginx-daemon-pod
+  template:
+    metadata:
+      name: nginx-pod
+      labels:
+        app: nginx-daemon-pod
+        abc: xyz
+    spec:
+      containers:
+        - name: nginx-pod-cnt
+          image: docker.io/osmanyay/ng-debug:v1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+              name: http
+          resources:
+            limits:
+              cpu: 200m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-deployment-svc
+spec:
+  selector:
+    app: nginx-daemon-pod
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      nodePort: 30005
+      name: ng-port
+  type: LoadBalancer

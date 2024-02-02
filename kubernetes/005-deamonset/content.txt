@@ -1,0 +1,50 @@
+
+╭─  󱑍 15:32    devtopc   kubernetes-training-20240131\kubernetes    master !+
+╰─ cd .\005-deamonset\
+
+╭─  󱑍 15:32    devtopc   kubernetes-training-20240131\kubernetes\005-deamonset    master !+
+╰─ ls
+
+
+    Directory: C:\Users\os2ma\git\kubernetes-training-20240131\kubernetes\005-deamonset
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a----          2/2/2024   3:31 PM           1012 nginx-daemon.yaml
+
+
+
+╭─  󱑍 15:32    devtopc   kubernetes-training-20240131\kubernetes\005-deamonset    master !+
+╰─ kubectl apply -f ./nginx-daemon.yaml
+daemonset.apps/nginx-daemon created
+service/nginx-deployment-svc configured
+
+╭─  󱑍 15:32    devtopc   kubernetes-training-20240131\kubernetes\005-deamonset    master !+
+╰─ kubectl get pods -o wide
+NAME                                READY   STATUS    RESTARTS   AGE    IP            NODE           NOMINATED NODE   READINESS GATES
+nginx-daemon-bzj2x                  1/1     Running   0          43s    10.244.0.6    minikube       <none>           <none>
+nginx-daemon-zrqc4                  1/1     Running   0          43s    10.244.1.23   minikube-m02   <none>           <none>
+nginx-daemon-zz2mr                  1/1     Running   0          43s    10.244.2.22   minikube-m03   <none>           <none>
+nginx-deployment-55bfcb975f-56ltn   1/1     Running   0          69m    10.244.2.20   minikube-m03   <none>           <none>
+nginx-deployment-55bfcb975f-7cmqg   1/1     Running   0          69m    10.244.2.21   minikube-m03   <none>           <none>
+nginx-deployment-55bfcb975f-pggcj   1/1     Running   0          69m    10.244.1.22   minikube-m02   <none>           <none>
+nginx-pod                           1/1     Running   0          6h3m   10.244.1.9    minikube-m02   <none>           <none>
+
+╭─  󱑍 15:33    devtopc   kubernetes-training-20240131\kubernetes\005-deamonset    master !+
+╰─ kubectl delete pods nginx-daemon-bzj2x
+pod "nginx-daemon-bzj2x" deleted
+
+╭─  󱑍 15:34    devtopc   kubernetes-training-20240131\kubernetes\005-deamonset    master !+
+╰─ kubectl get pods -o wide
+NAME                                READY   STATUS    RESTARTS   AGE    IP            NODE           NOMINATED NODE   READINESS GATES
+nginx-daemon-hfmf6                  1/1     Running   0          4s     10.244.0.7    minikube       <none>           <none>
+nginx-daemon-zrqc4                  1/1     Running   0          93s    10.244.1.23   minikube-m02   <none>           <none>
+nginx-daemon-zz2mr                  1/1     Running   0          93s    10.244.2.22   minikube-m03   <none>           <none>
+nginx-deployment-55bfcb975f-56ltn   1/1     Running   0          70m    10.244.2.20   minikube-m03   <none>           <none>
+nginx-deployment-55bfcb975f-7cmqg   1/1     Running   0          70m    10.244.2.21   minikube-m03   <none>           <none>
+nginx-deployment-55bfcb975f-pggcj   1/1     Running   0          70m    10.244.1.22   minikube-m02   <none>           <none>
+nginx-pod                           1/1     Running   0          6h4m   10.244.1.9    minikube-m02   <none>           <none>
+
+╭─  󱑍 15:34    devtopc   kubernetes-training-20240131\kubernetes\005-deamonset    master !+
+╰─

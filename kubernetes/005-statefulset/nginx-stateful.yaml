@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: nginx-stateful
+  labels:
+    app: nginx-stateful-pod
+spec:
+  serviceName: ng-stateful
+  replicas: 4
+  revisionHistoryLimit: 5
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: nginx-stateful-pod
+  template:
+    metadata:
+      name: nginx-stateful-pod
+      labels:
+        app: nginx-stateful-pod
+        abc: xyz
+    spec:
+      containers:
+        - name: nginx-pod-cnt
+          image: docker.io/osmanyay/ng-debug:v1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+              name: http
+          resources:
+            limits:
+              cpu: 200m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          volumeMounts:
+          - name: www
+            mountPath: /usr/share/nginx/html              
+      restartPolicy: Always
+  volumeClaimTemplates:
+  - metadata:
+      name: www
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: "manual"
+      resources:
+        requests:
+          storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-deployment-svc
+spec:
+  selector:
+    app: nginx-stateful-pod
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      name: ng-port
+  type: ClusterIP
+  clusterIP: None
