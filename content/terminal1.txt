@@ -1,0 +1,2194 @@
+
+  󱑍 22:39    devtopc   _resources\kind\loadbalancer    master ✘!+  kubectl describe pod foo-app
+Name:             foo-app
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             minikube-m02/192.168.49.3
+Start Time:       Wed, 31 Jan 2024 22:02:06 +0300
+Labels:           app=http-echo
+Annotations:      <none>
+Status:           Running
+IP:               10.244.1.10
+IPs:
+  IP:  10.244.1.10
+Containers:
+  nginx:
+    Container ID:   cri-o://d61a151f27ded0d4f2a43480815b47129e82a26ce86a924ef16b4833ca16d52d
+    Image:          docker.io/library/nginx
+    Image ID:       docker.io/library/nginx@sha256:161ef4b1bf7effb350a2a9625cb2b59f69d54ec6059a8a155a1438d0439c593c
+    Port:           <none>
+    Host Port:      <none>
+    State:          Running
+      Started:      Wed, 31 Jan 2024 22:02:18 +0300
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-wbrx5 (ro)
+Conditions:
+  Type              Status
+  Initialized       True
+  Ready             True
+  ContainersReady   True
+  PodScheduled      True
+Volumes:
+  kube-api-access-wbrx5:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  39m   default-scheduler  Successfully assigned default/foo-app to minikube-m02
+  Normal  Pulling    39m   kubelet            Pulling image "docker.io/library/nginx"
+  Normal  Pulled     38m   kubelet            Successfully pulled image "docker.io/library/nginx" in 12.303s (12.303s including waiting)
+  Normal  Created    38m   kubelet            Created container nginx
+  Normal  Started    38m   kubelet            Started container nginx
+
+  󱑍 22:41    devtopc   _resources\kind\loadbalancer    master ✘!+  cd..
+
+  󱑍 22:45    devtopc   turkcell-microservices-20231211\_resources\kind    master ✘!+  cd..
+
+  󱑍 22:45    devtopc   turkcell-microservices-20231211\_resources    master ✘!+  cd test01
+
+  󱑍 22:45    devtopc   turkcell-microservices-20231211\_resources\test01    master ✘!+  ls
+
+
+    Directory: C:\Users\os2ma\git\turkcell-microservices-20231211\_resources\test01
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a----         1/22/2024   8:43 PM           6989 1.t
+-a----         1/22/2024   8:41 PM            468 deployment1.yaml
+-a----         1/31/2024  10:45 PM            676 deployment2.yaml
+-a----         1/22/2024  10:03 PM            514 ingress1.yaml
+-a----         1/22/2024   8:17 PM            298 pod1.yaml
+-a----         1/22/2024   8:25 PM            198 service1.yaml
+
+
+
+  󱑍 22:45    devtopc   turkcell-microservices-20231211\_resources\test01    master ✘!+  kubectl apply -f .\deployment2.yaml
+deployment.apps/my-dep created
+The Service "my-dep-service" is invalid: spec.ports[0].nodePort: Invalid value: 80: provided port is not in the valid range. The range of valid ports is 30000-32767
+
+  󱑍 22:45    devtopc   turkcell-microservices-20231211\_resources\test01    master ✘!+✗  kubectl delete -f .\deployment2.yaml
+deployment.apps "my-dep" deleted
+Error from server (NotFound): error when deleting ".\\deployment2.yaml": services "my-dep-service" not found
+
+  󱑍 22:46    devtopc   turkcell-microservices-20231211\_resources\test01    master ✘!+✗  kubectl apply -f .\deployment2.yaml
+deployment.apps/my-dep created
+service/my-dep-service created
+
+  󱑍 22:46    devtopc   turkcell-microservices-20231211\_resources\test01    master ✘!+  kubectl get pods
+NAME                      READY   STATUS    RESTARTS   AGE
+foo-app                   1/1     Running   0          13m
+my-dep-6cb7b85b8f-bb642   1/1     Running   0          13s
+my-dep-6cb7b85b8f-hwpkh   1/1     Running   0          13s
+my-dep-6cb7b85b8f-xt5bd   1/1     Running   0          13s
+
+  󱑍 22:46    devtopc   turkcell-microservices-20231211\_resources\test01    master ✘!+  kubectl get all
+NAME                          READY   STATUS    RESTARTS   AGE
+pod/foo-app                   1/1     Running   0          13m
+pod/my-dep-6cb7b85b8f-bb642   1/1     Running   0          22s
+pod/my-dep-6cb7b85b8f-hwpkh   1/1     Running   0          22s
+pod/my-dep-6cb7b85b8f-xt5bd   1/1     Running   0          22s
+
+NAME                     TYPE           CLUSTER-IP      EXTERNAL-IP      PORT(S)        AGE
+service/foo-service      LoadBalancer   10.103.47.238   192.168.49.200   80:30874/TCP   13m
+service/kubernetes       ClusterIP      10.96.0.1       <none>           443/TCP        90m
+service/my-dep-service   LoadBalancer   10.110.16.36    192.168.49.201   80:31079/TCP   22s
+
+NAME                     READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/my-dep   3/3     3            3           22s
+
+NAME                                DESIRED   CURRENT   READY   AGE
+replicaset.apps/my-dep-6cb7b85b8f   3         3         3       22s
+
+  󱑍 22:47    devtopc   turkcell-microservices-20231211\_resources\test01    master ✘!+  curl 192.168.49.201
+
+  󱑍 22:47    devtopc   turkcell-microservices-20231211\_resources\test01    master ✘!+  curl 192.168.49.2
+
+  󱑍 22:47    devtopc   turkcell-microservices-20231211\_resources\test01    master ✘!+  curl 192.168.49.2:31079
+
+  󱑍 22:47    devtopc   turkcell-microservices-20231211\_resources\test01    master ✘!+  kubectl exec -it my-dep-6cb7b85b8f-bb642 -- sh
+# ifconfig
+sh: 1: ifconfig: not found
+# ip
+sh: 2: ip: not found
+# curl my-dep-6cb7b85b8f-hwpkh
+curl: (6) Could not resolve host: my-dep-6cb7b85b8f-hwpkh
+# curl 10.244.2.7
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+html { color-scheme: light dark; }
+body { width: 35em; margin: 0 auto;
+font-family: Tahoma, Verdana, Arial, sans-serif; }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+# curl 10.244.1.12
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+html { color-scheme: light dark; }
+body { width: 35em; margin: 0 auto;
+font-family: Tahoma, Verdana, Arial, sans-serif; }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+# exit
+
+  󱑍 22:54    devtopc   turkcell-microservices-20231211\_resources\test01    master ✘!+  kubectl get pods -o wide
+NAME                      READY   STATUS    RESTARTS   AGE     IP            NODE           NOMINATED NODE   READINESS GATES
+foo-app                   1/1     Running   0          21m     10.244.1.10   minikube-m02   <none>           <none>
+my-dep-6cb7b85b8f-bb642   1/1     Running   0          8m39s   10.244.0.4    minikube       <none>           <none>
+my-dep-6cb7b85b8f-hwpkh   1/1     Running   0          8m39s   10.244.2.7    minikube-m03   <none>           <none>
+my-dep-6cb7b85b8f-xt5bd   1/1     Running   0          8m39s   10.244.1.12   minikube-m02   <none>           <none>
+
+  󱑍 22:54    devtopc   turkcell-microservices-20231211\_resources\test01    master ✘!+  kubectl get svc
+NAME             TYPE           CLUSTER-IP      EXTERNAL-IP      PORT(S)        AGE
+foo-service      LoadBalancer   10.103.47.238   192.168.49.200   80:30874/TCP   21m
+kubernetes       ClusterIP      10.96.0.1       <none>           443/TCP        99m
+my-dep-service   LoadBalancer   10.110.16.36    192.168.49.201   80:31079/TCP   8m47s
+
+  󱑍 22:54    devtopc   turkcell-microservices-20231211\_resources\test01    master ✘!+  curl 192.168.49.201
+
+  󱑍 22:55    devtopc   turkcell-microservices-20231211\_resources\test01    master ✘!+  minikube service my-dep-service --url
+W0131 22:56:52.914307   14384 main.go:291] Unable to resolve the current Docker CLI context "default": context "default": context not found: open C:\Users\os2ma\.docker\contexts\meta\37a8eec1ce19687d132fe29051dca629d164e2c4958ba141d5f4133a33f0688f\meta.json: The system cannot find the path specified.
+http://127.0.0.1:51265
+❗  Because you are using a Docker driver on windows, the terminal needs to be open to run it.
+
+  󱑍 22:59    devtopc   turkcell-microservices-20231211\_resources\test01    master ✘!+  kubectl get svc
+NAME             TYPE           CLUSTER-IP      EXTERNAL-IP      PORT(S)        AGE
+foo-service      LoadBalancer   10.103.47.238   192.168.49.200   80:30874/TCP   27m
+kubernetes       ClusterIP      10.96.0.1       <none>           443/TCP        104m
+my-dep-service   LoadBalancer   10.110.16.36    192.168.49.201   80:31079/TCP   14m
+
+  󱑍 22:59    devtopc   turkcell-microservices-20231211\_resources\test01    master ✘!+  curl 192.168.49.201
+
+  󱑍 23:00    devtopc   turkcell-microservices-20231211\_resources\test01    master ✘!+  kubectl get pods
+E0201 12:06:13.968594   34220 memcache.go:265] couldn't get current server API group list: Get "http://localhost:8080/api?timeout=32s": context deadline exceeded - error from a previous attempt: EOF
+E0201 12:06:45.972491   34220 memcache.go:265] couldn't get current server API group list: Get "http://localhost:8080/api?timeout=32s": context deadline exceeded - error from a previous attempt: EOF
+E0201 12:07:17.978584   34220 memcache.go:265] couldn't get current server API group list: Get "http://localhost:8080/api?timeout=32s": context deadline exceeded - error from a previous attempt: EOF
+E0201 12:07:48.846971   34220 memcache.go:265] couldn't get current server API group list: Get "http://localhost:8080/api?timeout=32s": EOF
+E0201 12:08:20.591700   34220 memcache.go:265] couldn't get current server API group list: Get "http://localhost:8080/api?timeout=32s": EOF
+Unable to connect to the server: EOF
+
+  󱑍 12:08    devtopc   turkcell-microservices-20231211\_resources\test01    master ✘!+✗  cd /
+
+  󱑍 15:33    devtopc   C:\   podman images
+REPOSITORY                           TAG           IMAGE ID      CREATED        SIZE
+localhost/spring-project             v1.0.0        433b8cabba97  33 hours ago   466 MB
+localhost/osman-alpine               v1.0.2        8f434c453687  33 hours ago   20.8 MB
+localhost/osman-alpine               v1.0.1        8c8f21eec63b  33 hours ago   20.8 MB
+localhost/osman-alpine               v1.0.0        0f8bdfca28a4  33 hours ago   20.8 MB
+localhost/osman/alpine-mc            latest        9835970e738d  34 hours ago   20.8 MB
+docker.io/library/alpine             3.18          d3782b16ccc9  5 days ago     7.63 MB
+docker.io/library/alpine             latest        05455a08881e  5 days ago     7.67 MB
+docker.io/kindest/node               <none>        dcd9d3cef648  6 weeks ago    917 MB
+gcr.io/k8s-minikube/kicbase          v0.0.42       dbc648475405  2 months ago   1.21 GB
+docker.io/library/nginx              latest        a8758716bb6a  3 months ago   191 MB
+docker.io/library/openjdk            21-jdk-slim   a48f4cb73730  4 months ago   443 MB
+docker.io/provectuslabs/kafka-ui     latest        7270929fd871  7 months ago   291 MB
+docker.io/confluentinc/cp-kafka      7.3.2         da23a46211ad  11 months ago  845 MB
+docker.io/confluentinc/cp-zookeeper  7.2.1         3f28db6a433d  18 months ago  792 MB
+docker.io/library/openjdk            8-jdk-alpine  a3562aa0b991  4 years ago    106 MB
+
+  󱑍 15:33    devtopc   C:\   kubectl get pods
+NAME        READY   STATUS    RESTARTS   AGE
+nginx-pod   1/1     Running   0          3m55s
+
+  󱑍 15:35    devtopc   C:\   kubectl delete pods nginx-pod
+pod "nginx-pod" deleted
+
+  󱑍 15:35    devtopc   C:\   kubectl get pods
+No resources found in default namespace.
+
+  󱑍 15:35    devtopc   C:\   kubectl get pods
+No resources found in default namespace.
+
+  󱑍 15:35    devtopc   C:\   kubectl get pods
+No resources found in default namespace.
+
+  󱑍 15:36    devtopc   C:\   kubectl --help
+kubectl controls the Kubernetes cluster manager.
+
+ Find more information at: https://kubernetes.io/docs/reference/kubectl/
+
+Basic Commands (Beginner):
+  create          Create a resource from a file or from stdin
+  expose          Take a replication controller, service, deployment or pod and expose it as a new Kubernetes service
+  run             Run a particular image on the cluster
+  set             Set specific features on objects
+
+Basic Commands (Intermediate):
+  explain         Get documentation for a resource
+  get             Display one or many resources
+  edit            Edit a resource on the server
+  delete          Delete resources by file names, stdin, resources and names, or by resources and label selector
+
+Deploy Commands:
+  rollout         Manage the rollout of a resource
+  scale           Set a new size for a deployment, replica set, or replication controller
+  autoscale       Auto-scale a deployment, replica set, stateful set, or replication controller
+
+Cluster Management Commands:
+  certificate     Modify certificate resources.
+  cluster-info    Display cluster information
+  top             Display resource (CPU/memory) usage
+  cordon          Mark node as unschedulable
+  uncordon        Mark node as schedulable
+  drain           Drain node in preparation for maintenance
+  taint           Update the taints on one or more nodes
+
+Troubleshooting and Debugging Commands:
+  describe        Show details of a specific resource or group of resources
+  logs            Print the logs for a container in a pod
+  attach          Attach to a running container
+  exec            Execute a command in a container
+  port-forward    Forward one or more local ports to a pod
+  proxy           Run a proxy to the Kubernetes API server
+  cp              Copy files and directories to and from containers
+  auth            Inspect authorization
+  debug           Create debugging sessions for troubleshooting workloads and nodes
+  events          List events
+
+Advanced Commands:
+  diff            Diff the live version against a would-be applied version
+  apply           Apply a configuration to a resource by file name or stdin
+  patch           Update fields of a resource
+  replace         Replace a resource by file name or stdin
+  wait            Experimental: Wait for a specific condition on one or many resources
+  kustomize       Build a kustomization target from a directory or URL
+
+Settings Commands:
+  label           Update the labels on a resource
+  annotate        Update the annotations on a resource
+  completion      Output shell completion code for the specified shell (bash, zsh, fish, or powershell)
+
+Other Commands:
+  api-resources   Print the supported API resources on the server
+  api-versions    Print the supported API versions on the server, in the form of "group/version"
+  config          Modify kubeconfig files
+  plugin          Provides utilities for interacting with plugins
+  version         Print the client and server version information
+
+Usage:
+  kubectl [flags] [options]
+
+Use "kubectl <command> --help" for more information about a given command.
+Use "kubectl options" for a list of global command-line options (applies to all commands).
+
+  󱑍 15:36    devtopc   C:\   kubectl get pods
+No resources found in default namespace.
+
+  󱑍 15:36    devtopc   C:\   kubectl get pods
+NAME        READY   STATUS    RESTARTS   AGE
+nginx-pod   1/1     Running   0          24s
+
+  󱑍 15:37    devtopc   C:\   kubectl get pods -o wide
+NAME        READY   STATUS    RESTARTS   AGE   IP           NODE           NOMINATED NODE   READINESS GATES
+nginx-pod   1/1     Running   0          59s   10.244.1.3   minikube-m02   <none>           <none>
+
+  󱑍 15:38    devtopc   C:\   kubectl top pods
+error: Metrics API not available
+
+  󱑍 15:39    devtopc   C:\ ✗  kubectl exec -it nginx-pod -- sh
+# ls -al
+total 72
+dr-xr-xr-x   1 root root 4096 Feb  1 05:13 .
+dr-xr-xr-x   1 root root 4096 Feb  1 05:13 ..
+lrwxrwxrwx   1 root root    7 Jan 10 00:00 bin -> usr/bin
+drwxr-xr-x   2 root root 4096 Dec  9 21:08 boot
+drwxr-xr-x   5 root root  360 Feb  1 05:13 dev
+drwxr-xr-x   1 root root 4096 Jan 12 00:21 docker-entrypoint.d
+-rwxr-xr-x   1 root root 1620 Jan 12 00:21 docker-entrypoint.sh
+drwxr-xr-x   1 root root 4096 Feb  1 05:13 etc
+drwxr-xr-x   2 root root 4096 Dec  9 21:08 home
+lrwxrwxrwx   1 root root    7 Jan 10 00:00 lib -> usr/lib
+lrwxrwxrwx   1 root root    9 Jan 10 00:00 lib32 -> usr/lib32
+lrwxrwxrwx   1 root root    9 Jan 10 00:00 lib64 -> usr/lib64
+lrwxrwxrwx   1 root root   10 Jan 10 00:00 libx32 -> usr/libx32
+drwxr-xr-x   2 root root 4096 Jan 10 00:00 media
+drwxr-xr-x   2 root root 4096 Jan 10 00:00 mnt
+drwxr-xr-x   2 root root 4096 Jan 10 00:00 opt
+dr-xr-xr-x 485 root root    0 Feb  1 05:13 proc
+drwx------   2 root root 4096 Jan 10 00:00 root
+drwxr-xr-x   1 root root 4096 Feb  1 05:13 run
+lrwxrwxrwx   1 root root    8 Jan 10 00:00 sbin -> usr/sbin
+drwxr-xr-x   2 root root 4096 Jan 10 00:00 srv
+dr-xr-xr-x  11 root root    0 Feb  1 05:13 sys
+drwxrwxrwt   2 root root 4096 Jan 10 00:00 tmp
+drwxr-xr-x   1 root root 4096 Jan 10 00:00 usr
+drwxr-xr-x   1 root root 4096 Jan 10 00:00 var
+# ifconfig
+sh: 2: ifconfig: not found
+# bash
+root@nginx-pod:/# ip
+bash: ip: command not found
+root@nginx-pod:/# busybox
+bash: busybox: command not found
+root@nginx-pod:/# cd bin
+root@nginx-pod:/bin# ls -al
+total 26464
+drwxr-xr-x 1 root root      4096 Jan 12 00:21  .
+drwxr-xr-x 1 root root      4096 Jan 10 00:00  ..
+-rwxr-xr-x 1 root root     68496 Sep 20  2022 '['
+-rwxr-xr-x 1 root root     31040 Mar 23  2023  addpart
+-rwxr-xr-x 1 root root     18752 May 25  2023  apt
+-rwxr-xr-x 1 root root     88456 May 25  2023  apt-cache
+-rwxr-xr-x 1 root root     22920 May 25  2023  apt-cdrom
+-rwxr-xr-x 1 root root     26944 May 25  2023  apt-config
+-rwxr-xr-x 1 root root     51592 May 25  2023  apt-get
+-rwxr-xr-x 1 root root     27972 May 25  2023  apt-key
+-rwxr-xr-x 1 root root     59784 May 25  2023  apt-mark
+-rwxr-xr-x 1 root root     43888 Sep 20  2022  arch
+lrwxrwxrwx 1 root root        21 Jun 17  2022  awk -> /etc/alternatives/awk
+-rwxr-xr-x 1 root root     60400 Sep 20  2022  b2sum
+-rwxr-xr-x 1 root root     48016 Sep 20  2022  base32
+-rwxr-xr-x 1 root root     48016 Sep 20  2022  base64
+-rwxr-xr-x 1 root root     43856 Sep 20  2022  basename
+-rwxr-xr-x 1 root root     56208 Sep 20  2022  basenc
+-rwxr-xr-x 1 root root   1265648 Apr 23  2023  bash
+-rwxr-xr-x 1 root root      6865 Apr 23  2023  bashbug
+-rwxr-xr-x 1 root root      6841 Oct 23 17:52  c_rehash
+lrwxrwxrwx 1 root root         3 May  7  2023  captoinfo -> tic
+-rwxr-xr-x 1 root root     44016 Sep 20  2022  cat
+-rwxr-sr-x 1 root shadow   80376 Mar 23  2023  chage
+-rwxr-xr-x 1 root root     14584 Mar  5  2023  chattr
+-rwxr-xr-x 1 root root     68720 Sep 20  2022  chcon
+-rwsr-xr-x 1 root root     62672 Mar 23  2023  chfn
+-rwxr-xr-x 1 root root     68656 Sep 20  2022  chgrp
+-rwxr-xr-x 1 root root     64496 Sep 20  2022  chmod
+-rwxr-xr-x 1 root root     55616 Mar 23  2023  choom
+-rwxr-xr-x 1 root root     72752 Sep 20  2022  chown
+-rwxr-xr-x 1 root root     67904 Mar 23  2023  chrt
+-rwsr-xr-x 1 root root     52880 Mar 23  2023  chsh
+-rwxr-xr-x 1 root root    142384 Sep 20  2022  cksum
+-rwxr-xr-x 1 root root     14584 May  7  2023  clear
+-rwxr-xr-x 1 root root     14488 Apr 23  2023  clear_console
+-rwxr-xr-x 1 root root     52176 Feb  3  2023  cmp
+-rwxr-xr-x 1 root root     48048 Sep 20  2022  comm
+-rwxr-xr-x 1 root root    151152 Sep 20  2022  cp
+-rwxr-xr-x 1 root root    122032 Sep 20  2022  csplit
+-rwxr-xr-x 1 root root    280800 Dec 10 06:07  curl
+-rwxr-xr-x 1 root root     48112 Sep 20  2022  cut
+-rwxr-xr-x 1 root root    125640 Jan  5  2023  dash
+-rwxr-xr-x 1 root root    121904 Sep 20  2022  date
+-rwxr-xr-x 1 root root     89240 Sep 20  2022  dd
+-rwxr-xr-x 1 root root     24358 Jul  9  2022  deb-systemd-helper
+-rwxr-xr-x 1 root root      6241 Jul  2  2022  deb-systemd-invoke
+-rwxr-xr-x 1 root root      2859 Jan  8  2023  debconf
+-rwxr-xr-x 1 root root     11541 Jan  8  2023  debconf-apt-progress
+-rwxr-xr-x 1 root root       608 Jan  8  2023  debconf-communicate
+-rwxr-xr-x 1 root root      1719 Jan  8  2023  debconf-copydb
+-rwxr-xr-x 1 root root       647 Jan  8  2023  debconf-escape
+-rwxr-xr-x 1 root root      2995 Jan  8  2023  debconf-set-selections
+-rwxr-xr-x 1 root root      1827 Jan  8  2023  debconf-show
+-rwxr-xr-x 1 root root     31040 Mar 23  2023  delpart
+-rwxr-xr-x 1 root root    102200 Sep 20  2022  df
+-rwxr-xr-x 1 root root    155216 Feb  3  2023  diff
+-rwxr-xr-x 1 root root     68752 Feb  3  2023  diff3
+-rwxr-xr-x 1 root root    151344 Sep 20  2022  dir
+-rwxr-xr-x 1 root root     52144 Sep 20  2022  dircolors
+-rwxr-xr-x 1 root root     39760 Sep 20  2022  dirname
+-rwxr-xr-x 1 root root     88656 Mar 23  2023  dmesg
+lrwxrwxrwx 1 root root         8 Dec 19  2022  dnsdomainname -> hostname
+lrwxrwxrwx 1 root root         8 Dec 19  2022  domainname -> hostname
+-rwxr-xr-x 1 root root    318096 May 11  2023  dpkg
+-rwxr-xr-x 1 root root    170512 May 11  2023  dpkg-deb
+-rwxr-xr-x 1 root root    158264 May 11  2023  dpkg-divert
+-rwxr-xr-x 1 root root     21206 May 11  2023  dpkg-maintscript-helper
+-rwxr-xr-x 1 root root    162384 May 11  2023  dpkg-query
+-rwxr-xr-x 1 root root      4186 May 11  2023  dpkg-realpath
+-rwxr-xr-x 1 root root    129520 May 11  2023  dpkg-split
+-rwxr-xr-x 1 root root     63824 May 11  2023  dpkg-statoverride
+-rwxr-xr-x 1 root root     88560 May 11  2023  dpkg-trigger
+-rwxr-xr-x 1 root root    175440 Sep 20  2022  du
+-rwxr-xr-x 1 root root     43856 Sep 20  2022  echo
+-rwxr-xr-x 1 root root        41 Jan 24  2023  egrep
+-rwxr-xr-x 1 root root     48536 Sep 20  2022  env
+-rwxr-xr-x 1 root root     35136 Feb 26  2023  envsubst
+-rwxr-xr-x 1 root root     43952 Sep 20  2022  expand
+-rwxr-sr-x 1 root shadow   31184 Mar 23  2023  expiry
+-rwxr-xr-x 1 root root    117808 Sep 20  2022  expr
+-rwxr-xr-x 1 root root     85200 Sep 20  2022  factor
+-rwxr-xr-x 1 root root     23072 Mar 23  2023  faillog
+-rwxr-xr-x 1 root root     35136 Mar 23  2023  fallocate
+-rwxr-xr-x 1 root root     35664 Sep 20  2022  false
+-rwxr-xr-x 1 root root        41 Jan 24  2023  fgrep
+-rwxr-xr-x 1 root root     35184 Mar 23  2023  fincore
+-rwxr-xr-x 1 root root    224848 Jan  8  2023  find
+-rwxr-xr-x 1 root root     85600 Mar 23  2023  findmnt
+-rwxr-xr-x 1 root root     35216 Mar 23  2023  flock
+-rwxr-xr-x 1 root root     48016 Sep 20  2022  fmt
+-rwxr-xr-x 1 root root     43920 Sep 20  2022  fold
+-rwxr-xr-x 1 root root     27136 Sep 30 08:31  getconf
+-rwxr-xr-x 1 root root     36320 Sep 30 08:31  getent
+-rwxr-xr-x 1 root root     35136 Mar 23  2023  getopt
+-rwxr-xr-x 1 root root     35136 Feb 26  2023  gettext
+-rwxr-xr-x 1 root root      5188 Feb 26  2023  gettext.sh
+-rwsr-xr-x 1 root root     88496 Mar 23  2023  gpasswd
+-rwxr-xr-x 1 root root    474112 Mar 26  2023  gpgv
+-rwxr-xr-x 1 root root    203152 Jan 24  2023  grep
+-rwxr-xr-x 1 root root     43920 Sep 20  2022  groups
+-rwxr-xr-x 2 root root      2346 Apr 10  2022  gunzip
+-rwxr-xr-x 1 root root      6447 Apr 10  2022  gzexe
+-rwxr-xr-x 1 root root     98136 Apr 10  2022  gzip
+-rwxr-xr-x 1 root root     51600 Mar 23  2023  hardlink
+-rwxr-xr-x 1 root root     48080 Sep 20  2022  head
+-rwxr-xr-x 1 root root     39760 Sep 20  2022  hostid
+-rwxr-xr-x 1 root root     22680 Dec 19  2022  hostname
+lrwxrwxrwx 1 root root         7 Mar 23  2023  i386 -> setarch
+-rwxr-xr-x 1 root root     64648 Sep 30 08:31  iconv
+-rwxr-xr-x 1 root root     48144 Sep 20  2022  id
+-rwxr-xr-x 1 root root     63808 May  7  2023  infocmp
+lrwxrwxrwx 1 root root         3 May  7  2023  infotocap -> tic
+-rwxr-xr-x 1 root root    159544 Sep 20  2022  install
+-rwxr-xr-x 1 root root     35136 Mar 23  2023  ionice
+-rwxr-xr-x 1 root root     35200 Mar 23  2023  ipcmk
+-rwxr-xr-x 1 root root     35136 Mar 23  2023  ipcrm
+-rwxr-xr-x 1 root root     76096 Mar 23  2023  ipcs
+-rwxr-xr-x 1 root root     14664 Jul 28  2023  ischroot
+-rwxr-xr-x 1 root root     56304 Sep 20  2022  join
+-rwxr-xr-x 1 root root     47424 Mar 23  2023  last
+lrwxrwxrwx 1 root root         4 Mar 23  2023  lastb -> last
+-rwxr-xr-x 1 root root     32512 Mar 23  2023  lastlog
+lrwxrwxrwx 1 root root        27 Sep 30 08:31  ld.so -> /lib64/ld-linux-x86-64.so.2
+-rwxr-xr-x 1 root root      5406 Sep 30 08:31  ldd
+-rwxr-xr-x 1 root root     39760 Sep 20  2022  link
+lrwxrwxrwx 1 root root         7 Mar 23  2023  linux32 -> setarch
+lrwxrwxrwx 1 root root         7 Mar 23  2023  linux64 -> setarch
+-rwxr-xr-x 1 root root     72824 Sep 20  2022  ln
+-rwxr-xr-x 1 root root     47272 Sep 30 08:31  locale
+-rwxr-xr-x 1 root root    298912 Sep 30 08:31  localedef
+-rwxr-xr-x 1 root root     56216 Mar 23  2023  logger
+-rwxr-xr-x 1 root root     53024 Mar 23  2023  login
+-rwxr-xr-x 1 root root     39760 Sep 20  2022  logname
+-rwxr-xr-x 1 root root    151344 Sep 20  2022  ls
+-rwxr-xr-x 1 root root     14584 Mar  5  2023  lsattr
+-rwxr-xr-x 1 root root    207168 Mar 23  2023  lsblk
+-rwxr-xr-x 1 root root    129344 Mar 23  2023  lscpu
+-rwxr-xr-x 1 root root    123192 Mar 23  2023  lsfd
+-rwxr-xr-x 1 root root    100672 Mar 23  2023  lsipc
+-rwxr-xr-x 1 root root     35312 Mar 23  2023  lsirq
+-rwxr-xr-x 1 root root     72400 Mar 23  2023  lslocks
+-rwxr-xr-x 1 root root     96576 Mar 23  2023  lslogins
+-rwxr-xr-x 1 root root     67904 Mar 23  2023  lsmem
+-rwxr-xr-x 1 root root     84288 Mar 23  2023  lsns
+-rwxr-xr-x 1 root root    158376 Jun 17  2022  mawk
+-rwxr-xr-x 1 root root     35200 Mar 23  2023  mcookie
+-rwxr-xr-x 1 root root     52176 Sep 20  2022  md5sum
+lrwxrwxrwx 1 root root         6 Sep 20  2022  md5sum.textutils -> md5sum
+-rwxr-xr-x 1 root root     18744 Mar 23  2023  mesg
+-rwxr-xr-x 1 root root     97552 Sep 20  2022  mkdir
+-rwxr-xr-x 1 root root     68784 Sep 20  2022  mkfifo
+-rwxr-xr-x 1 root root     72912 Sep 20  2022  mknod
+-rwxr-xr-x 1 root root     43952 Sep 20  2022  mktemp
+-rwxr-xr-x 1 root root     59712 Mar 23  2023  more
+-rwsr-xr-x 1 root root     59704 Mar 23  2023  mount
+-rwxr-xr-x 1 root root     18744 Mar 23  2023  mountpoint
+-rwxr-xr-x 1 root root    142968 Sep 20  2022  mv
+-rwxr-xr-x 1 root root     35136 Mar 23  2023  namei
+lrwxrwxrwx 1 root root        22 Jun 17  2022  nawk -> /etc/alternatives/nawk
+-rwsr-xr-x 1 root root     48896 Mar 23  2023  newgrp
+-rwxr-xr-x 1 root root     35136 Feb 26  2023  ngettext
+-rwxr-xr-x 1 root root     43888 Sep 20  2022  nice
+lrwxrwxrwx 1 root root         8 Dec 19  2022  nisdomainname -> hostname
+-rwxr-xr-x 1 root root    888976 Oct 24 16:10  njs
+-rwxr-xr-x 1 root root    113776 Sep 20  2022  nl
+-rwxr-xr-x 1 root root     43920 Sep 20  2022  nohup
+-rwxr-xr-x 1 root root     43920 Sep 20  2022  nproc
+-rwxr-xr-x 1 root root     35368 Mar 23  2023  nsenter
+-rwxr-xr-x 1 root root     68624 Sep 20  2022  numfmt
+-rwxr-xr-x 1 root root     80912 Sep 20  2022  od
+-rwxr-xr-x 1 root root    976616 Oct 23 17:52  openssl
+lrwxrwxrwx 1 root root        23 Mar 23  2023  pager -> /etc/alternatives/pager
+-rwxr-xr-x 1 root root    121152 Mar 23  2023  partx
+-rwsr-xr-x 1 root root     68248 Mar 23  2023  passwd
+-rwxr-xr-x 1 root root     43920 Sep 20  2022  paste
+-rwxr-xr-x 1 root root     43888 Sep 20  2022  pathchk
+-rwxr-xr-x 2 root root   3804432 Nov 25 20:59  perl
+-rwxr-xr-x 2 root root   3804432 Nov 25 20:59  perl5.36.0
+lrwxrwxrwx 1 root root        14 Apr  3  2023  pidof -> /sbin/killall5
+-rwxr-xr-x 1 root root     48176 Sep 20  2022  pinky
+-rwxr-xr-x 1 root root     23232 Sep 30 08:31  pldd
+-rwxr-xr-x 1 root root     81008 Sep 20  2022  pr
+-rwxr-xr-x 1 root root     35664 Sep 20  2022  printenv
+-rwxr-xr-x 1 root root     64432 Sep 20  2022  printf
+-rwxr-xr-x 1 root root     39760 Mar 23  2023  prlimit
+-rwxr-xr-x 1 root root    138480 Sep 20  2022  ptx
+-rwxr-xr-x 1 root root     43952 Sep 20  2022  pwd
+lrwxrwxrwx 1 root root         4 Apr 23  2023  rbash -> bash
+-rwxr-xr-x 1 root root     52112 Sep 20  2022  readlink
+-rwxr-xr-x 1 root root     52144 Sep 20  2022  realpath
+-rwxr-xr-x 1 root root     22840 Mar 23  2023  rename.ul
+-rwxr-xr-x 1 root root     14648 Mar 23  2023  renice
+lrwxrwxrwx 1 root root         4 May  7  2023  reset -> tset
+-rwxr-xr-x 1 root root     72000 Mar 23  2023  resizepart
+-rwxr-xr-x 1 root root     14648 Mar 23  2023  rev
+-rwxr-xr-x 1 root root        30 Jan 29  2020  rgrep
+-rwxr-xr-x 1 root root     72752 Sep 20  2022  rm
+-rwxr-xr-x 1 root root     56240 Sep 20  2022  rmdir
+-rwxr-xr-x 1 root root     27560 Jul 28  2023  run-parts
+-rwxr-xr-x 1 root root     43984 Sep 20  2022  runcon
+-rwxr-xr-x 1 root root     10487 Jul 28  2023  savelog
+-rwxr-xr-x 1 root root     71992 Mar 23  2023  script
+-rwxr-xr-x 1 root root     55608 Mar 23  2023  scriptlive
+-rwxr-xr-x 1 root root     47416 Mar 23  2023  scriptreplay
+-rwxr-xr-x 1 root root     56400 Feb  3  2023  sdiff
+-rwxr-xr-x 1 root root    126424 Jan  5  2023  sed
+-rwxr-xr-x 1 root root     60336 Sep 20  2022  seq
+-rwxr-xr-x 1 root root     27216 Mar 23  2023  setarch
+-rwxr-xr-x 1 root root     80192 Mar 23  2023  setpriv
+-rwxr-xr-x 1 root root     14648 Mar 23  2023  setsid
+-rwxr-xr-x 1 root root     47424 Mar 23  2023  setterm
+lrwxrwxrwx 1 root root         6 Mar 23  2023  sg -> newgrp
+lrwxrwxrwx 1 root root         4 Jan  5  2023  sh -> dash
+-rwxr-xr-x 1 root root     56272 Sep 20  2022  sha1sum
+-rwxr-xr-x 1 root root     60368 Sep 20  2022  sha224sum
+-rwxr-xr-x 1 root root     60368 Sep 20  2022  sha256sum
+-rwxr-xr-x 1 root root     64464 Sep 20  2022  sha384sum
+-rwxr-xr-x 1 root root     64464 Sep 20  2022  sha512sum
+-rwxr-xr-x 1 root root     64656 Sep 20  2022  shred
+-rwxr-xr-x 1 root root     60400 Sep 20  2022  shuf
+-rwxr-xr-x 1 root root     43888 Sep 20  2022  sleep
+-rwxr-xr-x 1 root root    118456 Sep 20  2022  sort
+-rwxr-xr-x 1 root root     60984 Sep 20  2022  split
+-rwxr-xr-x 1 root root     97488 Sep 20  2022  stat
+-rwxr-xr-x 1 root root     60336 Sep 20  2022  stdbuf
+-rwxr-xr-x 1 root root     85008 Sep 20  2022  stty
+-rwsr-xr-x 1 root root     72000 Mar 23  2023  su
+-rwxr-xr-x 1 root root     52184 Sep 20  2022  sum
+-rwxr-xr-x 1 root root     39824 Sep 20  2022  sync
+-rwxr-xr-x 1 root root     18672 May  7  2023  tabs
+-rwxr-xr-x 1 root root    113712 Sep 20  2022  tac
+-rwxr-xr-x 1 root root     76944 Sep 20  2022  tail
+-rwxr-xr-x 1 root root    531984 Apr  6  2023  tar
+-rwxr-xr-x 1 root root     63808 Mar 23  2023  taskset
+-rwxr-xr-x 1 root root     43984 Sep 20  2022  tee
+-rwxr-xr-x 1 root root     14520 Jul 28  2023  tempfile
+-rwxr-xr-x 1 root root     60304 Sep 20  2022  test
+-rwxr-xr-x 1 root root     92512 May  7  2023  tic
+-rwxr-xr-x 1 root root     48632 Sep 20  2022  timeout
+-rwxr-xr-x 1 root root     22768 May  7  2023  toe
+-rwxr-xr-x 1 root root    109616 Sep 20  2022  touch
+-rwxr-xr-x 1 root root     26896 May  7  2023  tput
+-rwxr-xr-x 1 root root     56208 Sep 20  2022  tr
+-rwxr-xr-x 1 root root     35664 Sep 20  2022  true
+-rwxr-xr-x 1 root root     43920 Sep 20  2022  truncate
+-rwxr-xr-x 1 root root     30968 May  7  2023  tset
+-rwxr-xr-x 1 root root     56208 Sep 20  2022  tsort
+-rwxr-xr-x 1 root root     35696 Sep 20  2022  tty
+-rwxr-xr-x 1 root root     15351 Sep 30 08:31  tzselect
+-rwxr-xr-x 1 root root     63808 Mar 23  2023  uclampset
+-rwsr-xr-x 1 root root     35128 Mar 23  2023  umount
+-rwxr-xr-x 1 root root     43888 Sep 20  2022  uname
+-rwxr-xr-x 2 root root      2346 Apr 10  2022  uncompress
+-rwxr-xr-x 1 root root     43952 Sep 20  2022  unexpand
+-rwxr-xr-x 1 root root     48080 Sep 20  2022  uniq
+-rwxr-xr-x 1 root root     39760 Sep 20  2022  unlink
+-rwxr-xr-x 1 root root     84520 Mar 23  2023  unshare
+-rwxr-xr-x 1 root root     59712 May 11  2023  update-alternatives
+-rwxr-xr-x 1 root root     39824 Sep 20  2022  users
+-rwxr-xr-x 1 root root     31032 Mar 23  2023  utmpdump
+-rwxr-xr-x 1 root root    151344 Sep 20  2022  vdir
+-rwxr-sr-x 1 root tty      39224 Mar 23  2023  wall
+-rwxr-xr-x 1 root root     52280 Sep 20  2022  wc
+-rwxr-xr-x 1 root root     72024 Mar 23  2023  wdctl
+-rwxr-xr-x 1 root root     31504 Mar 23  2023  whereis
+lrwxrwxrwx 1 root root        23 Jul 28  2023  which -> /etc/alternatives/which
+-rwxr-xr-x 1 root root       946 Jul 28  2023  which.debianutils
+-rwxr-xr-x 1 root root     60432 Sep 20  2022  who
+-rwxr-xr-x 1 root root     39792 Sep 20  2022  whoami
+lrwxrwxrwx 1 root root         7 Mar 23  2023  x86_64 -> setarch
+-rwxr-xr-x 1 root root     72136 Jan  8  2023  xargs
+-rwxr-xr-x 1 root root     39760 Sep 20  2022  yes
+lrwxrwxrwx 1 root root         8 Dec 19  2022  ypdomainname -> hostname
+-rwxr-xr-x 1 root root      1984 Apr 10  2022  zcat
+-rwxr-xr-x 1 root root      1678 Apr 10  2022  zcmp
+-rwxr-xr-x 1 root root      6460 Apr 10  2022  zdiff
+-rwxr-xr-x 1 root root     23064 Sep 30 08:31  zdump
+-rwxr-xr-x 1 root root        29 Apr 10  2022  zegrep
+-rwxr-xr-x 1 root root        29 Apr 10  2022  zfgrep
+-rwxr-xr-x 1 root root      2081 Apr 10  2022  zforce
+-rwxr-xr-x 1 root root      8103 Apr 10  2022  zgrep
+-rwxr-xr-x 1 root root      2206 Apr 10  2022  zless
+-rwxr-xr-x 1 root root      1842 Apr 10  2022  zmore
+-rwxr-xr-x 1 root root      4577 Apr 10  2022  znew
+root@nginx-pod:/bin# exit
+exit
+# exit
+
+  󱑍 15:42    devtopc   C:\   kubectl get pods -o wide
+NAME        READY   STATUS    RESTARTS   AGE     IP           NODE           NOMINATED NODE   READINESS GATES
+nginx-pod   1/1     Running   0          5m14s   10.244.1.3   minikube-m02   <none>           <none>
+
+  󱑍 15:42    devtopc   C:\   kubectl get pods -o wide
+NAME          READY   STATUS              RESTARTS   AGE     IP           NODE           NOMINATED NODE   READINESS GATES
+busybox-pod   0/1     ContainerCreating   0          7s      <none>       minikube-m03   <none>           <none>
+nginx-pod     1/1     Running             0          9m32s   10.244.1.3   minikube-m02   <none>           <none>
+
+  󱑍 15:46    devtopc   C:\   kubectl get nodes -o wide
+NAME           STATUS   ROLES           AGE     VERSION   INTERNAL-IP    EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION                       CONTAINER-RUNTIME
+minikube       Ready    control-plane   3h56m   v1.28.3   192.168.49.2   <none>        Ubuntu 22.04.3 LTS   5.15.133.1-microsoft-standard-WSL2   cri-o://1.24.6
+minikube-m02   Ready    <none>          3h56m   v1.28.3   192.168.49.3   <none>        Ubuntu 22.04.3 LTS   5.15.133.1-microsoft-standard-WSL2   cri-o://1.24.6
+minikube-m03   Ready    <none>          3h55m   v1.28.3   192.168.49.4   <none>        Ubuntu 22.04.3 LTS   5.15.133.1-microsoft-standard-WSL2   cri-o://1.24.6
+
+  󱑍 15:46    devtopc   C:\   kubectl get pods -o wide
+NAME          READY   STATUS    RESTARTS   AGE   IP           NODE           NOMINATED NODE   READINESS GATES
+busybox-pod   1/1     Running   0          48s   10.244.2.2   minikube-m03   <none>           <none>
+nginx-pod     1/1     Running   0          10m   10.244.1.3   minikube-m02   <none>           <none>
+
+  󱑍 15:46    devtopc   C:\   kubectl get pods -o wide
+NAME          READY   STATUS    RESTARTS      AGE     IP           NODE           NOMINATED NODE   READINESS GATES
+busybox-pod   1/1     Running   2 (49s ago)   2m59s   10.244.2.2   minikube-m03   <none>           <none>
+nginx-pod     1/1     Running   0             12m     10.244.1.3   minikube-m02   <none>           <none>
+nginx-pod-2   1/1     Running   0             9s      10.244.1.4   minikube-m02   <none>           <none>
+
+  󱑍 15:48    devtopc   C:\   kubectl get deployments
+NAME               READY   UP-TO-DATE   AVAILABLE   AGE
+nginx-deployment   2/4     4            2           15s
+
+  󱑍 15:59    devtopc   C:\   kubectl get nodes -o yaml
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Node
+  metadata:
+    annotations:
+      kubeadm.alpha.kubernetes.io/cri-socket: unix:///var/run/crio/crio.sock
+      node.alpha.kubernetes.io/ttl: "0"
+      volumes.kubernetes.io/controller-managed-attach-detach: "true"
+    creationTimestamp: "2024-02-01T01:26:41Z"
+    labels:
+      beta.kubernetes.io/arch: amd64
+      beta.kubernetes.io/os: linux
+      kubernetes.io/arch: amd64
+      kubernetes.io/hostname: minikube
+      kubernetes.io/os: linux
+      minikube.k8s.io/commit: 8220a6eb95f0a4d75f7f2d7b14cef975f050512d
+      minikube.k8s.io/name: minikube
+      minikube.k8s.io/primary: "true"
+      minikube.k8s.io/updated_at: 2024_02_01T12_08_00_0700
+      minikube.k8s.io/version: v1.32.0
+      node-role.kubernetes.io/control-plane: ""
+      node.kubernetes.io/exclude-from-external-load-balancers: ""
+    name: minikube
+    resourceVersion: "15693"
+    uid: 31166191-0d81-4775-be27-4aeab86094f9
+  spec:
+    podCIDR: 10.244.0.0/24
+    podCIDRs:
+    - 10.244.0.0/24
+  status:
+    addresses:
+    - address: 192.168.49.2
+      type: InternalIP
+    - address: minikube
+      type: Hostname
+    allocatable:
+      cpu: "32"
+      ephemeral-storage: 1055762868Ki
+      hugepages-1Gi: "0"
+      hugepages-2Mi: "0"
+      memory: 16181116Ki
+      pods: "110"
+    capacity:
+      cpu: "32"
+      ephemeral-storage: 1055762868Ki
+      hugepages-1Gi: "0"
+      hugepages-2Mi: "0"
+      memory: 16181116Ki
+      pods: "110"
+    conditions:
+    - lastHeartbeatTime: "2024-02-01T05:37:06Z"
+      lastTransitionTime: "2024-02-01T01:26:40Z"
+      message: kubelet has sufficient memory available
+      reason: KubeletHasSufficientMemory
+      status: "False"
+      type: MemoryPressure
+    - lastHeartbeatTime: "2024-02-01T05:37:06Z"
+      lastTransitionTime: "2024-02-01T01:26:40Z"
+      message: kubelet has no disk pressure
+      reason: KubeletHasNoDiskPressure
+      status: "False"
+      type: DiskPressure
+    - lastHeartbeatTime: "2024-02-01T05:37:06Z"
+      lastTransitionTime: "2024-02-01T01:26:40Z"
+      message: kubelet has sufficient PID available
+      reason: KubeletHasSufficientPID
+      status: "False"
+      type: PIDPressure
+    - lastHeartbeatTime: "2024-02-01T05:37:06Z"
+      lastTransitionTime: "2024-02-01T01:26:41Z"
+      message: kubelet is posting ready status
+      reason: KubeletReady
+      status: "True"
+      type: Ready
+    daemonEndpoints:
+      kubeletEndpoint:
+        Port: 10250
+    images:
+    - names:
+      - registry.k8s.io/etcd@sha256:6c54bcd6cf6de7760c17ddfb31dd76f5ac64c5d8609d66829b542eb0b6b7ab15
+      - registry.k8s.io/etcd@sha256:e013d0d5e4e25d00c61a7ff839927a1f36479678f11e49502b53a5e0b14f10c3
+      - registry.k8s.io/etcd:3.5.9-0
+      sizeBytes: 295456551
+    - names:
+      - registry.k8s.io/kube-apiserver@sha256:86d5311d13774d7beed6fbf181db7d8ace26d1b3d1c85b72c9f9b4d585d409ab
+      - registry.k8s.io/kube-apiserver@sha256:8db46adefb0f251da210504e2ce268c36a5a7c630667418ea4601f63c9057a2d
+      - registry.k8s.io/kube-apiserver:v1.28.3
+      sizeBytes: 127165392
+    - names:
+      - registry.k8s.io/kube-controller-manager@sha256:640661231facded984f698e79315bceb5391b04e5159662e940e6e5ab2098707
+      - registry.k8s.io/kube-controller-manager@sha256:dd4817791cfaa85482f27af472e4b100e362134530a7c4bae50f3ce10729d75d
+      - registry.k8s.io/kube-controller-manager:v1.28.3
+      sizeBytes: 123188534
+    - names:
+      - registry.k8s.io/kube-proxy@sha256:695da0e5a1be2d0f94af107e4f29faaa958f1c90e4765064ca3c45003de97eb8
+      - registry.k8s.io/kube-proxy@sha256:73a9f275e1fa5f0b9ae744914764847c2c4fdc66e9e528d67dea70007f9a6072
+      - registry.k8s.io/kube-proxy:v1.28.3
+      sizeBytes: 74691991
+    - names:
+      - docker.io/kindest/kindnetd@sha256:4a58d1cd2b45bf2460762a51a4aa9c80861f460af35800c05baab0573f923052
+      - docker.io/kindest/kindnetd@sha256:a315b9c49a50d5e126e1b5fa5ef0eae2a9b367c9c4f868e897d772b142372bb4
+      - docker.io/kindest/kindnetd:v20230809-80a64d96
+      sizeBytes: 65258016
+    - names:
+      - registry.k8s.io/kube-scheduler@sha256:2cfaab2fe5e5937bc37f3d05f3eb7a4912a981ab8375f1d9c2c3190b259d1725
+      - registry.k8s.io/kube-scheduler@sha256:fbe8838032fa8f01b36282417596119a481e5bc11eca89270073122f0cc90374
+      - registry.k8s.io/kube-scheduler:v1.28.3
+      sizeBytes: 61498678
+    - names:
+      - registry.k8s.io/coredns/coredns@sha256:a0ead06651cf580044aeb0a0feba63591858fb2e43ade8c9dea45a6a89ae7e5e
+      - registry.k8s.io/coredns/coredns@sha256:be7652ce0b43b1339f3d14d9b14af9f588578011092c1f7893bd55432d83a378
+      - registry.k8s.io/coredns/coredns:v1.10.1
+      sizeBytes: 53621675
+    - names:
+      - gcr.io/k8s-minikube/storage-provisioner@sha256:18eb69d1418e854ad5a19e399310e52808a8321e4c441c1dddad8977a0d7a944
+      - gcr.io/k8s-minikube/storage-provisioner@sha256:c4c05d6ad6c0f24d87b39e596d4dddf64bec3e0d84f5b36e4511d4ebf583f38f
+      - gcr.io/k8s-minikube/storage-provisioner:v5
+      sizeBytes: 31470524
+    - names:
+      - registry.k8s.io/pause@sha256:7031c1b283388d2c2e09b57badb803c05ebed362dc88d84b480cc47f72a21097
+      - registry.k8s.io/pause@sha256:8d4106c88ec0bd28001e34c975d65175d994072d65341f62a8ab0754b0fafe10
+      - registry.k8s.io/pause:3.9
+      sizeBytes: 750414
+    nodeInfo:
+      architecture: amd64
+      bootID: 0c71c275-8b53-47a3-9a81-0f551e1f5230
+      containerRuntimeVersion: cri-o://1.24.6
+      kernelVersion: 5.15.133.1-microsoft-standard-WSL2
+      kubeProxyVersion: v1.28.3
+      kubeletVersion: v1.28.3
+      machineID: 0b6250a879034bd78d787cd027de1a4f
+      operatingSystem: linux
+      osImage: Ubuntu 22.04.3 LTS
+      systemUUID: 0b6250a879034bd78d787cd027de1a4f
+- apiVersion: v1
+  kind: Node
+  metadata:
+    annotations:
+      kubeadm.alpha.kubernetes.io/cri-socket: /var/run/crio/crio.sock
+      node.alpha.kubernetes.io/ttl: "0"
+      volumes.kubernetes.io/controller-managed-attach-detach: "true"
+    creationTimestamp: "2024-02-01T01:27:11Z"
+    labels:
+      beta.kubernetes.io/arch: amd64
+      beta.kubernetes.io/os: linux
+      kubernetes.io/arch: amd64
+      kubernetes.io/hostname: minikube-m02
+      kubernetes.io/os: linux
+    name: minikube-m02
+    resourceVersion: "15629"
+    uid: 03cd4863-8884-42e2-8f51-b132c6398392
+  spec:
+    podCIDR: 10.244.1.0/24
+    podCIDRs:
+    - 10.244.1.0/24
+  status:
+    addresses:
+    - address: 192.168.49.3
+      type: InternalIP
+    - address: minikube-m02
+      type: Hostname
+    allocatable:
+      cpu: "32"
+      ephemeral-storage: 1055762868Ki
+      hugepages-1Gi: "0"
+      hugepages-2Mi: "0"
+      memory: 16181116Ki
+      pods: "110"
+    capacity:
+      cpu: "32"
+      ephemeral-storage: 1055762868Ki
+      hugepages-1Gi: "0"
+      hugepages-2Mi: "0"
+      memory: 16181116Ki
+      pods: "110"
+    conditions:
+    - lastHeartbeatTime: "2024-02-01T05:36:45Z"
+      lastTransitionTime: "2024-02-01T01:27:11Z"
+      message: kubelet has sufficient memory available
+      reason: KubeletHasSufficientMemory
+      status: "False"
+      type: MemoryPressure
+    - lastHeartbeatTime: "2024-02-01T05:36:45Z"
+      lastTransitionTime: "2024-02-01T01:27:11Z"
+      message: kubelet has no disk pressure
+      reason: KubeletHasNoDiskPressure
+      status: "False"
+      type: DiskPressure
+    - lastHeartbeatTime: "2024-02-01T05:36:45Z"
+      lastTransitionTime: "2024-02-01T01:27:11Z"
+      message: kubelet has sufficient PID available
+      reason: KubeletHasSufficientPID
+      status: "False"
+      type: PIDPressure
+    - lastHeartbeatTime: "2024-02-01T05:36:45Z"
+      lastTransitionTime: "2024-02-01T01:27:11Z"
+      message: kubelet is posting ready status
+      reason: KubeletReady
+      status: "True"
+      type: Ready
+    daemonEndpoints:
+      kubeletEndpoint:
+        Port: 10250
+    images:
+    - names:
+      - registry.k8s.io/etcd@sha256:6c54bcd6cf6de7760c17ddfb31dd76f5ac64c5d8609d66829b542eb0b6b7ab15
+      - registry.k8s.io/etcd@sha256:e013d0d5e4e25d00c61a7ff839927a1f36479678f11e49502b53a5e0b14f10c3
+      - registry.k8s.io/etcd:3.5.9-0
+      sizeBytes: 295456551
+    - names:
+      - docker.io/library/nginx@sha256:161ef4b1bf7effb350a2a9625cb2b59f69d54ec6059a8a155a1438d0439c593c
+      - docker.io/library/nginx@sha256:4c0fdaa8b6341bfdeca5f18f7837462c80cff90527ee35ef185571e1c327beac
+      - docker.io/library/nginx:latest
+      sizeBytes: 190867606
+    - names:
+      - registry.k8s.io/kube-apiserver@sha256:86d5311d13774d7beed6fbf181db7d8ace26d1b3d1c85b72c9f9b4d585d409ab
+      - registry.k8s.io/kube-apiserver@sha256:8db46adefb0f251da210504e2ce268c36a5a7c630667418ea4601f63c9057a2d
+      - registry.k8s.io/kube-apiserver:v1.28.3
+      sizeBytes: 127165392
+    - names:
+      - registry.k8s.io/kube-controller-manager@sha256:640661231facded984f698e79315bceb5391b04e5159662e940e6e5ab2098707
+      - registry.k8s.io/kube-controller-manager@sha256:dd4817791cfaa85482f27af472e4b100e362134530a7c4bae50f3ce10729d75d
+      - registry.k8s.io/kube-controller-manager:v1.28.3
+      sizeBytes: 123188534
+    - names:
+      - registry.k8s.io/kube-proxy@sha256:695da0e5a1be2d0f94af107e4f29faaa958f1c90e4765064ca3c45003de97eb8
+      - registry.k8s.io/kube-proxy@sha256:73a9f275e1fa5f0b9ae744914764847c2c4fdc66e9e528d67dea70007f9a6072
+      - registry.k8s.io/kube-proxy:v1.28.3
+      sizeBytes: 74691991
+    - names:
+      - docker.io/kindest/kindnetd@sha256:4a58d1cd2b45bf2460762a51a4aa9c80861f460af35800c05baab0573f923052
+      - docker.io/kindest/kindnetd@sha256:a315b9c49a50d5e126e1b5fa5ef0eae2a9b367c9c4f868e897d772b142372bb4
+      - docker.io/kindest/kindnetd:v20230809-80a64d96
+      sizeBytes: 65258016
+    - names:
+      - registry.k8s.io/kube-scheduler@sha256:2cfaab2fe5e5937bc37f3d05f3eb7a4912a981ab8375f1d9c2c3190b259d1725
+      - registry.k8s.io/kube-scheduler@sha256:fbe8838032fa8f01b36282417596119a481e5bc11eca89270073122f0cc90374
+      - registry.k8s.io/kube-scheduler:v1.28.3
+      sizeBytes: 61498678
+    - names:
+      - registry.k8s.io/coredns/coredns@sha256:a0ead06651cf580044aeb0a0feba63591858fb2e43ade8c9dea45a6a89ae7e5e
+      - registry.k8s.io/coredns/coredns@sha256:be7652ce0b43b1339f3d14d9b14af9f588578011092c1f7893bd55432d83a378
+      - registry.k8s.io/coredns/coredns:v1.10.1
+      sizeBytes: 53621675
+    - names:
+      - gcr.io/k8s-minikube/storage-provisioner@sha256:18eb69d1418e854ad5a19e399310e52808a8321e4c441c1dddad8977a0d7a944
+      - gcr.io/k8s-minikube/storage-provisioner@sha256:c4c05d6ad6c0f24d87b39e596d4dddf64bec3e0d84f5b36e4511d4ebf583f38f
+      - gcr.io/k8s-minikube/storage-provisioner:v5
+      sizeBytes: 31470524
+    - names:
+      - registry.k8s.io/pause@sha256:7031c1b283388d2c2e09b57badb803c05ebed362dc88d84b480cc47f72a21097
+      - registry.k8s.io/pause@sha256:8d4106c88ec0bd28001e34c975d65175d994072d65341f62a8ab0754b0fafe10
+      - registry.k8s.io/pause:3.9
+      sizeBytes: 750414
+    nodeInfo:
+      architecture: amd64
+      bootID: 0c71c275-8b53-47a3-9a81-0f551e1f5230
+      containerRuntimeVersion: cri-o://1.24.6
+      kernelVersion: 5.15.133.1-microsoft-standard-WSL2
+      kubeProxyVersion: v1.28.3
+      kubeletVersion: v1.28.3
+      machineID: 977c92697d884e19a0a6fef3a28618f7
+      operatingSystem: linux
+      osImage: Ubuntu 22.04.3 LTS
+      systemUUID: 977c92697d884e19a0a6fef3a28618f7
+- apiVersion: v1
+  kind: Node
+  metadata:
+    annotations:
+      kubeadm.alpha.kubernetes.io/cri-socket: /var/run/crio/crio.sock
+      node.alpha.kubernetes.io/ttl: "0"
+      volumes.kubernetes.io/controller-managed-attach-detach: "true"
+    creationTimestamp: "2024-02-01T01:27:37Z"
+    labels:
+      beta.kubernetes.io/arch: amd64
+      beta.kubernetes.io/os: linux
+      kubernetes.io/arch: amd64
+      kubernetes.io/hostname: minikube-m03
+      kubernetes.io/os: linux
+    name: minikube-m03
+    resourceVersion: "15460"
+    uid: fd189c14-b4ad-4e90-b6b4-cc33ebfb8919
+  spec:
+    podCIDR: 10.244.2.0/24
+    podCIDRs:
+    - 10.244.2.0/24
+  status:
+    addresses:
+    - address: 192.168.49.4
+      type: InternalIP
+    - address: minikube-m03
+      type: Hostname
+    allocatable:
+      cpu: "32"
+      ephemeral-storage: 1055762868Ki
+      hugepages-1Gi: "0"
+      hugepages-2Mi: "0"
+      memory: 16181116Ki
+      pods: "110"
+    capacity:
+      cpu: "32"
+      ephemeral-storage: 1055762868Ki
+      hugepages-1Gi: "0"
+      hugepages-2Mi: "0"
+      memory: 16181116Ki
+      pods: "110"
+    conditions:
+    - lastHeartbeatTime: "2024-02-01T05:33:59Z"
+      lastTransitionTime: "2024-02-01T01:27:37Z"
+      message: kubelet has sufficient memory available
+      reason: KubeletHasSufficientMemory
+      status: "False"
+      type: MemoryPressure
+    - lastHeartbeatTime: "2024-02-01T05:33:59Z"
+      lastTransitionTime: "2024-02-01T01:27:37Z"
+      message: kubelet has no disk pressure
+      reason: KubeletHasNoDiskPressure
+      status: "False"
+      type: DiskPressure
+    - lastHeartbeatTime: "2024-02-01T05:33:59Z"
+      lastTransitionTime: "2024-02-01T01:27:37Z"
+      message: kubelet has sufficient PID available
+      reason: KubeletHasSufficientPID
+      status: "False"
+      type: PIDPressure
+    - lastHeartbeatTime: "2024-02-01T05:33:59Z"
+      lastTransitionTime: "2024-02-01T01:27:38Z"
+      message: kubelet is posting ready status
+      reason: KubeletReady
+      status: "True"
+      type: Ready
+    daemonEndpoints:
+      kubeletEndpoint:
+        Port: 10250
+    images:
+    - names:
+      - registry.k8s.io/etcd@sha256:6c54bcd6cf6de7760c17ddfb31dd76f5ac64c5d8609d66829b542eb0b6b7ab15
+      - registry.k8s.io/etcd@sha256:e013d0d5e4e25d00c61a7ff839927a1f36479678f11e49502b53a5e0b14f10c3
+      - registry.k8s.io/etcd:3.5.9-0
+      sizeBytes: 295456551
+    - names:
+      - registry.k8s.io/kube-apiserver@sha256:86d5311d13774d7beed6fbf181db7d8ace26d1b3d1c85b72c9f9b4d585d409ab
+      - registry.k8s.io/kube-apiserver@sha256:8db46adefb0f251da210504e2ce268c36a5a7c630667418ea4601f63c9057a2d
+      - registry.k8s.io/kube-apiserver:v1.28.3
+      sizeBytes: 127165392
+    - names:
+      - registry.k8s.io/kube-controller-manager@sha256:640661231facded984f698e79315bceb5391b04e5159662e940e6e5ab2098707
+      - registry.k8s.io/kube-controller-manager@sha256:dd4817791cfaa85482f27af472e4b100e362134530a7c4bae50f3ce10729d75d
+      - registry.k8s.io/kube-controller-manager:v1.28.3
+      sizeBytes: 123188534
+    - names:
+      - registry.k8s.io/kube-proxy@sha256:695da0e5a1be2d0f94af107e4f29faaa958f1c90e4765064ca3c45003de97eb8
+      - registry.k8s.io/kube-proxy@sha256:73a9f275e1fa5f0b9ae744914764847c2c4fdc66e9e528d67dea70007f9a6072
+      - registry.k8s.io/kube-proxy:v1.28.3
+      sizeBytes: 74691991
+    - names:
+      - docker.io/kindest/kindnetd@sha256:4a58d1cd2b45bf2460762a51a4aa9c80861f460af35800c05baab0573f923052
+      - docker.io/kindest/kindnetd@sha256:a315b9c49a50d5e126e1b5fa5ef0eae2a9b367c9c4f868e897d772b142372bb4
+      - docker.io/kindest/kindnetd:v20230809-80a64d96
+      sizeBytes: 65258016
+    - names:
+      - registry.k8s.io/kube-scheduler@sha256:2cfaab2fe5e5937bc37f3d05f3eb7a4912a981ab8375f1d9c2c3190b259d1725
+      - registry.k8s.io/kube-scheduler@sha256:fbe8838032fa8f01b36282417596119a481e5bc11eca89270073122f0cc90374
+      - registry.k8s.io/kube-scheduler:v1.28.3
+      sizeBytes: 61498678
+    - names:
+      - registry.k8s.io/coredns/coredns@sha256:a0ead06651cf580044aeb0a0feba63591858fb2e43ade8c9dea45a6a89ae7e5e
+      - registry.k8s.io/coredns/coredns@sha256:be7652ce0b43b1339f3d14d9b14af9f588578011092c1f7893bd55432d83a378
+      - registry.k8s.io/coredns/coredns:v1.10.1
+      sizeBytes: 53621675
+    - names:
+      - gcr.io/k8s-minikube/storage-provisioner@sha256:18eb69d1418e854ad5a19e399310e52808a8321e4c441c1dddad8977a0d7a944
+      - gcr.io/k8s-minikube/storage-provisioner@sha256:c4c05d6ad6c0f24d87b39e596d4dddf64bec3e0d84f5b36e4511d4ebf583f38f
+      - gcr.io/k8s-minikube/storage-provisioner:v5
+      sizeBytes: 31470524
+    - names:
+      - docker.io/library/busybox@sha256:538721340ded10875f4710cad688c70e5d0ecb4dcd5e7d0c161f301f36f79414
+      - docker.io/library/busybox@sha256:6d9ac9237a84afe1516540f40a0fafdc86859b2141954b4d643af7066d598b74
+      - docker.io/library/busybox:latest
+      sizeBytes: 4504102
+    - names:
+      - registry.k8s.io/pause@sha256:7031c1b283388d2c2e09b57badb803c05ebed362dc88d84b480cc47f72a21097
+      - registry.k8s.io/pause@sha256:8d4106c88ec0bd28001e34c975d65175d994072d65341f62a8ab0754b0fafe10
+      - registry.k8s.io/pause:3.9
+      sizeBytes: 750414
+    nodeInfo:
+      architecture: amd64
+      bootID: 0c71c275-8b53-47a3-9a81-0f551e1f5230
+      containerRuntimeVersion: cri-o://1.24.6
+      kernelVersion: 5.15.133.1-microsoft-standard-WSL2
+      kubeProxyVersion: v1.28.3
+      kubeletVersion: v1.28.3
+      machineID: e57061406ca546979b5e4901dddde79a
+      operatingSystem: linux
+      osImage: Ubuntu 22.04.3 LTS
+      systemUUID: e57061406ca546979b5e4901dddde79a
+kind: List
+metadata:
+  resourceVersion: ""
+
+  󱑍 15:59    devtopc   C:\   kubectl get nodes -o wide
+NAME           STATUS   ROLES           AGE     VERSION   INTERNAL-IP    EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION                       CONTAINER-RUNTIME
+minikube       Ready    control-plane   4h11m   v1.28.3   192.168.49.2   <none>        Ubuntu 22.04.3 LTS   5.15.133.1-microsoft-standard-WSL2   cri-o://1.24.6
+minikube-m02   Ready    <none>          4h10m   v1.28.3   192.168.49.3   <none>        Ubuntu 22.04.3 LTS   5.15.133.1-microsoft-standard-WSL2   cri-o://1.24.6
+minikube-m03   Ready    <none>          4h10m   v1.28.3   192.168.49.4   <none>        Ubuntu 22.04.3 LTS   5.15.133.1-microsoft-standard-WSL2   cri-o://1.24.6
+
+  󱑍 15:59    devtopc   C:\   kubectl get pods -o wide
+NAME                                READY   STATUS             RESTARTS       AGE   IP           NODE           NOMINATED NODE   READINESS GATES
+busybox-pod                         0/1     CrashLoopBackOff   6 (109s ago)   14m   10.244.2.2   minikube-m03   <none>           <none>
+nginx-deployment-56d6fb75bd-26495   1/1     Running            0              58s   10.244.0.3   minikube       <none>           <none>
+nginx-deployment-56d6fb75bd-2mbhp   1/1     Running            0              58s   10.244.1.5   minikube-m02   <none>           <none>
+nginx-deployment-56d6fb75bd-9hbzb   1/1     Running            0              58s   10.244.1.6   minikube-m02   <none>           <none>
+nginx-deployment-56d6fb75bd-pql89   1/1     Running            0              58s   10.244.2.3   minikube-m03   <none>           <none>
+nginx-pod                           1/1     Running            0              24m   10.244.1.3   minikube-m02   <none>           <none>
+nginx-pod-2                         1/1     Running            0              12m   10.244.1.4   minikube-m02   <none>           <none>
+
+  󱑍 15:59    devtopc   C:\   kubectl delete pods nginx-deployment-56d6fb75bd-26495
+pod "nginx-deployment-56d6fb75bd-26495" deleted
+
+  󱑍 16:01    devtopc   C:\   kubectl get pods -o wide
+NAME                                READY   STATUS             RESTARTS        AGE     IP           NODE           NOMINATED NODE   READINESS GATES
+busybox-pod                         0/1     CrashLoopBackOff   6 (3m36s ago)   16m     10.244.2.2   minikube-m03   <none>           <none>
+nginx-deployment-56d6fb75bd-2mbhp   1/1     Running            0               2m45s   10.244.1.5   minikube-m02   <none>           <none>
+nginx-deployment-56d6fb75bd-4t2s4   1/1     Running            0               3s      10.244.0.4   minikube       <none>           <none>
+nginx-deployment-56d6fb75bd-9hbzb   1/1     Running            0               2m45s   10.244.1.6   minikube-m02   <none>           <none>
+nginx-deployment-56d6fb75bd-pql89   1/1     Running            0               2m45s   10.244.2.3   minikube-m03   <none>           <none>
+nginx-pod                           1/1     Running            0               26m     10.244.1.3   minikube-m02   <none>           <none>
+nginx-pod-2                         1/1     Running            0               13m     10.244.1.4   minikube-m02   <none>           <none>
+
+  󱑍 16:01    devtopc   C:\   kubectl exec -it nginx-deployment-56d6fb75bd-2mbhp -- sh
+# curl 10.244.2.3
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+html { color-scheme: light dark; }
+body { width: 35em; margin: 0 auto;
+font-family: Tahoma, Verdana, Arial, sans-serif; }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+# curl nginx-deployment-56d6fb75bd-pql89
+curl: (6) Could not resolve host: nginx-deployment-56d6fb75bd-pql89
+# curl nginx-deployment
+curl: (6) Could not resolve host: nginx-deployment
+# command terminated with exit code 137
+
+  󱑍 16:06    devtopc   C:\ ✗  kubectl get pods -o wide
+NAME                                READY   STATUS             RESTARTS        AGE     IP           NODE           NOMINATED NODE   READINESS GATES
+busybox-pod                         0/1     CrashLoopBackOff   7 (2m20s ago)   21m     10.244.2.2   minikube-m03   <none>           <none>
+nginx-deployment-56d6fb75bd-4t2s4   1/1     Running            0               5m1s    10.244.0.4   minikube       <none>           <none>
+nginx-deployment-56d6fb75bd-9hbzb   1/1     Running            0               7m43s   10.244.1.6   minikube-m02   <none>           <none>
+nginx-deployment-56d6fb75bd-pql89   1/1     Running            0               7m43s   10.244.2.3   minikube-m03   <none>           <none>
+nginx-pod                           1/1     Running            0               31m     10.244.1.3   minikube-m02   <none>           <none>
+nginx-pod-2                         1/1     Running            0               18m     10.244.1.4   minikube-m02   <none>           <none>
+
+  󱑍 16:06    devtopc   C:\   kubectl get deployments
+NAME               READY   UP-TO-DATE   AVAILABLE   AGE
+nginx-deployment   3/3     3            3           7m54s
+
+  󱑍 16:06    devtopc   C:\   kubectl get replicaset
+NAME                          DESIRED   CURRENT   READY   AGE
+nginx-deployment-56d6fb75bd   3         3         3       8m51s
+
+  󱑍 16:07    devtopc   C:\   kubectl describe replicaset
+Name:           nginx-deployment-56d6fb75bd
+Namespace:      default
+Selector:       app=nginx-pod,pod-template-hash=56d6fb75bd
+Labels:         abc=xyz
+                app=nginx-pod
+                pod-template-hash=56d6fb75bd
+Annotations:    deployment.kubernetes.io/desired-replicas: 3
+                deployment.kubernetes.io/max-replicas: 4
+                deployment.kubernetes.io/revision: 1
+Controlled By:  Deployment/nginx-deployment
+Replicas:       3 current / 3 desired
+Pods Status:    3 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:  abc=xyz
+           app=nginx-pod
+           pod-template-hash=56d6fb75bd
+  Containers:
+   nginx-pod-cnt:
+    Image:        docker.io/library/nginx
+    Port:         80/TCP
+    Host Port:    0/TCP
+    Environment:  <none>
+    Mounts:       <none>
+  Volumes:        <none>
+Events:
+  Type    Reason            Age    From                   Message
+  ----    ------            ----   ----                   -------
+  Normal  SuccessfulCreate  7h30m  replicaset-controller  Created pod: nginx-deployment-56d6fb75bd-2mbhp
+  Normal  SuccessfulCreate  7h30m  replicaset-controller  Created pod: nginx-deployment-56d6fb75bd-26495
+  Normal  SuccessfulCreate  7h30m  replicaset-controller  Created pod: nginx-deployment-56d6fb75bd-pql89
+  Normal  SuccessfulCreate  7h30m  replicaset-controller  Created pod: nginx-deployment-56d6fb75bd-9hbzb
+  Normal  SuccessfulCreate  7h28m  replicaset-controller  Created pod: nginx-deployment-56d6fb75bd-4t2s4
+  Normal  SuccessfulDelete  7h23m  replicaset-controller  Deleted pod: nginx-deployment-56d6fb75bd-2mbhp
+
+  󱑍 16:07    devtopc   C:\   kubectl describe deployements
+error: the server doesn't have a resource type "deployements"
+
+  󱑍 16:08    devtopc   C:\ ✗  kubectl describe deployments
+Name:                   nginx-deployment
+Namespace:              default
+CreationTimestamp:      Thu, 01 Feb 2024 08:37:03 +0300
+Labels:                 app=nginx-pod
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=nginx-pod
+Replicas:               3 desired | 3 updated | 3 total | 3 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  abc=xyz
+           app=nginx-pod
+  Containers:
+   nginx-pod-cnt:
+    Image:        docker.io/library/nginx
+    Port:         80/TCP
+    Host Port:    0/TCP
+    Environment:  <none>
+    Mounts:       <none>
+  Volumes:        <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   nginx-deployment-56d6fb75bd (3/3 replicas created)
+Events:
+  Type    Reason             Age    From                   Message
+  ----    ------             ----   ----                   -------
+  Normal  ScalingReplicaSet  7h31m  deployment-controller  Scaled up replica set nginx-deployment-56d6fb75bd to 4
+  Normal  ScalingReplicaSet  7h23m  deployment-controller  Scaled down replica set nginx-deployment-56d6fb75bd to 3 from 4
+
+  󱑍 16:08    devtopc   C:\   minikube addons list
+W0201 20:20:44.716667   17468 main.go:291] Unable to resolve the current Docker CLI context "default": context "default": context not found: open C:\Users\os2ma\.docker\contexts\meta\37a8eec1ce19687d132fe29051dca629d164e2c4958ba141d5f4133a33f0688f\meta.json: The system cannot find the path specified.
+|-----------------------------|----------|--------------|--------------------------------|
+|         ADDON NAME          | PROFILE  |    STATUS    |           MAINTAINER           |
+|-----------------------------|----------|--------------|--------------------------------|
+| ambassador                  | minikube | disabled     | 3rd party (Ambassador)         |
+| auto-pause                  | minikube | disabled     | minikube                       |
+| cloud-spanner               | minikube | disabled     | Google                         |
+| csi-hostpath-driver         | minikube | disabled     | Kubernetes                     |
+| dashboard                   | minikube | disabled     | Kubernetes                     |
+| default-storageclass        | minikube | disabled     | Kubernetes                     |
+| efk                         | minikube | disabled     | 3rd party (Elastic)            |
+| freshpod                    | minikube | disabled     | Google                         |
+| gcp-auth                    | minikube | disabled     | Google                         |
+| gvisor                      | minikube | disabled     | minikube                       |
+| headlamp                    | minikube | disabled     | 3rd party (kinvolk.io)         |
+| helm-tiller                 | minikube | disabled     | 3rd party (Helm)               |
+| inaccel                     | minikube | disabled     | 3rd party (InAccel             |
+|                             |          |              | [info@inaccel.com])            |
+| ingress                     | minikube | disabled     | Kubernetes                     |
+| ingress-dns                 | minikube | disabled     | minikube                       |
+| inspektor-gadget            | minikube | disabled     | 3rd party                      |
+|                             |          |              | (inspektor-gadget.io)          |
+| istio                       | minikube | disabled     | 3rd party (Istio)              |
+| istio-provisioner           | minikube | disabled     | 3rd party (Istio)              |
+| kong                        | minikube | disabled     | 3rd party (Kong HQ)            |
+| kubeflow                    | minikube | disabled     | 3rd party                      |
+| kubevirt                    | minikube | disabled     | 3rd party (KubeVirt)           |
+| logviewer                   | minikube | disabled     | 3rd party (unknown)            |
+| metallb                     | minikube | disabled     | 3rd party (MetalLB)            |
+| metrics-server              | minikube | disabled     | Kubernetes                     |
+| nvidia-device-plugin        | minikube | disabled     | 3rd party (NVIDIA)             |
+| nvidia-driver-installer     | minikube | disabled     | 3rd party (Nvidia)             |
+| nvidia-gpu-device-plugin    | minikube | disabled     | 3rd party (Nvidia)             |
+| olm                         | minikube | disabled     | 3rd party (Operator Framework) |
+| pod-security-policy         | minikube | disabled     | 3rd party (unknown)            |
+| portainer                   | minikube | disabled     | 3rd party (Portainer.io)       |
+| registry                    | minikube | disabled     | minikube                       |
+| registry-aliases            | minikube | disabled     | 3rd party (unknown)            |
+| registry-creds              | minikube | disabled     | 3rd party (UPMC Enterprises)   |
+| storage-provisioner         | minikube | disabled     | minikube                       |
+| storage-provisioner-gluster | minikube | disabled     | 3rd party (Gluster)            |
+| storage-provisioner-rancher | minikube | disabled     | 3rd party (Rancher)            |
+| volumesnapshots             | minikube | disabled     | Kubernetes                     |
+|-----------------------------|----------|--------------|--------------------------------|
+
+  󱑍 20:20    devtopc   C:\   choco install kubernetes-helm
+Chocolatey v2.1.0
+Chocolatey detected you are not running from an elevated command shell
+ (cmd/powershell).
+
+ You may experience errors - many functions/packages
+ require admin rights. Only advanced users should run choco w/out an
+ elevated shell. When you open the command shell, you should ensure
+ that you do so with "Run as Administrator" selected. If you are
+ attempting to use Chocolatey in a non-administrator setting, you
+ must select a different location other than the default install
+ location. See
+ https://docs.chocolatey.org/en-us/choco/setup#non-administrative-install
+ for details.
+
+
+ Do you want to continue?([Y]es/[N]o): n
+
+
+  󱑍 20:29    devtopc   C:\ ✗  helm
+The Kubernetes package manager
+
+Common actions for Helm:
+
+- helm search:    search for charts
+- helm pull:      download a chart to your local directory to view
+- helm install:   upload the chart to Kubernetes
+- helm list:      list releases of charts
+
+Environment variables:
+
+| Name                               | Description                                                                                       |
+|------------------------------------|---------------------------------------------------------------------------------------------------|
+| $HELM_CACHE_HOME                   | set an alternative location for storing cached files.                                             |
+| $HELM_CONFIG_HOME                  | set an alternative location for storing Helm configuration.                                       |
+| $HELM_DATA_HOME                    | set an alternative location for storing Helm data.                                                |
+| $HELM_DEBUG                        | indicate whether or not Helm is running in Debug mode                                             |
+| $HELM_DRIVER                       | set the backend storage driver. Values are: configmap, secret, memory, sql.                       |
+| $HELM_DRIVER_SQL_CONNECTION_STRING | set the connection string the SQL storage driver should use.                                      |
+| $HELM_MAX_HISTORY                  | set the maximum number of helm release history.                                                   |
+| $HELM_NAMESPACE                    | set the namespace used for the helm operations.                                                   |
+| $HELM_NO_PLUGINS                   | disable plugins. Set HELM_NO_PLUGINS=1 to disable plugins.                                        |
+| $HELM_PLUGINS                      | set the path to the plugins directory                                                             |
+| $HELM_REGISTRY_CONFIG              | set the path to the registry config file.                                                         |
+| $HELM_REPOSITORY_CACHE             | set the path to the repository cache directory                                                    |
+| $HELM_REPOSITORY_CONFIG            | set the path to the repositories file.                                                            |
+| $KUBECONFIG                        | set an alternative Kubernetes configuration file (default "~/.kube/config")                       |
+| $HELM_KUBEAPISERVER                | set the Kubernetes API Server Endpoint for authentication                                         |
+| $HELM_KUBECAFILE                   | set the Kubernetes certificate authority file.                                                    |
+| $HELM_KUBEASGROUPS                 | set the Groups to use for impersonation using a comma-separated list.                             |
+| $HELM_KUBEASUSER                   | set the Username to impersonate for the operation.                                                |
+| $HELM_KUBECONTEXT                  | set the name of the kubeconfig context.                                                           |
+| $HELM_KUBETOKEN                    | set the Bearer KubeToken used for authentication.                                                 |
+| $HELM_KUBEINSECURE_SKIP_TLS_VERIFY | indicate if the Kubernetes API server's certificate validation should be skipped (insecure)       |
+| $HELM_KUBETLS_SERVER_NAME          | set the server name used to validate the Kubernetes API server certificate                        |
+| $HELM_BURST_LIMIT                  | set the default burst limit in the case the server contains many CRDs (default 100, -1 to disable)|
+
+Helm stores cache, configuration, and data based on the following configuration order:
+
+- If a HELM_*_HOME environment variable is set, it will be used
+- Otherwise, on systems supporting the XDG base directory specification, the XDG variables will be used
+- When no other location is set a default location will be used based on the operating system
+
+By default, the default directories depend on the Operating System. The defaults are listed below:
+
+| Operating System | Cache Path                | Configuration Path             | Data Path               |
+|------------------|---------------------------|--------------------------------|-------------------------|
+| Linux            | $HOME/.cache/helm         | $HOME/.config/helm             | $HOME/.local/share/helm |
+| macOS            | $HOME/Library/Caches/helm | $HOME/Library/Preferences/helm | $HOME/Library/helm      |
+| Windows          | %TEMP%\helm               | %APPDATA%\helm                 | %APPDATA%\helm          |
+
+Usage:
+  helm [command]
+
+Available Commands:
+  completion  generate autocompletion scripts for the specified shell
+  create      create a new chart with the given name
+  dependency  manage a chart's dependencies
+  env         helm client environment information
+  get         download extended information of a named release
+  help        Help about any command
+  history     fetch release history
+  install     install a chart
+  lint        examine a chart for possible issues
+  list        list releases
+  package     package a chart directory into a chart archive
+  plugin      install, list, or uninstall Helm plugins
+  pull        download a chart from a repository and (optionally) unpack it in local directory
+  push        push a chart to remote
+  registry    login to or logout from a registry
+  repo        add, list, remove, update, and index chart repositories
+  rollback    roll back a release to a previous revision
+  search      search for a keyword in charts
+  show        show information of a chart
+  status      display the status of the named release
+  template    locally render templates
+  test        run tests for a release
+  uninstall   uninstall a release
+  upgrade     upgrade a release
+  verify      verify that a chart at the given path has been signed and is valid
+  version     print the client version information
+
+Flags:
+      --burst-limit int                 client-side default throttling limit (default 100)
+      --debug                           enable verbose output
+  -h, --help                            help for helm
+      --kube-apiserver string           the address and the port for the Kubernetes API server
+      --kube-as-group stringArray       group to impersonate for the operation, this flag can be repeated to specify multiple groups.
+      --kube-as-user string             username to impersonate for the operation
+      --kube-ca-file string             the certificate authority file for the Kubernetes API server connection
+      --kube-context string             name of the kubeconfig context to use
+      --kube-insecure-skip-tls-verify   if true, the Kubernetes API server's certificate will not be checked for validity. This will make your HTTPS connections insecure
+      --kube-tls-server-name string     server name to use for Kubernetes API server certificate validation. If it is not provided, the hostname used to contact the server is used
+      --kube-token string               bearer token used for authentication
+      --kubeconfig string               path to the kubeconfig file
+  -n, --namespace string                namespace scope for this request
+      --registry-config string          path to the registry config file (default "C:\\Users\\os2ma\\AppData\\Roaming\\helm\\registry\\config.json")
+      --repository-cache string         path to the file containing cached repository indexes (default "C:\\Users\\os2ma\\AppData\\Local\\Temp\\helm\\repository")
+      --repository-config string        path to the file containing repository names and URLs (default "C:\\Users\\os2ma\\AppData\\Roaming\\helm\\repositories.yaml")
+
+Use "helm [command] --help" for more information about a command.
+
+  󱑍 20:32    devtopc   C:\   ls
+
+
+    Directory: C:\
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----         11/3/2023   1:51 PM                dev
+d-----         11/3/2023  12:53 PM                development
+d-----         7/20/2023  10:01 AM                docker
+d-----         1/30/2024   6:33 PM                downloads
+d-----         2/11/2023   6:02 AM                eSupport
+d-----         11/7/2023   2:04 PM                Family
+d-----        10/16/2023   2:47 PM                git
+d-----        10/13/2023   1:09 PM                innova
+d-----         7/13/2023   3:26 PM                ja-netfilter-all
+d-----        12/14/2023   2:25 PM                kafka
+d-----         10/1/2023  12:41 PM                linux
+d-----         10/1/2023   2:14 PM                MinGW
+d-r---         1/31/2024   5:00 PM                Program Files
+d-r---        12/12/2023   4:11 PM                Program Files (x86)
+d-----         6/30/2023   9:43 PM                Python311
+d-----        12/19/2023   3:33 PM                rabbitmq
+d-----        12/14/2023   2:28 PM                tmp
+d-----         1/28/2024   1:03 PM                training
+d-r---         6/27/2023   1:03 PM                Users
+d-----         1/12/2024   3:20 AM                Windows
+d-----        12/14/2023   2:28 PM                ztmp
+-a----        12/17/2023   3:50 AM          12288 DumpStack.log
+
+
+
+  󱑍 20:32    devtopc   C:\   cd ztmp
+
+  󱑍 20:32    devtopc   C:\ztmp   ls
+
+
+    Directory: C:\ztmp
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----        12/14/2023   2:28 PM                zookeeper
+
+
+
+  󱑍 20:32    devtopc   C:\ztmp   helm create --help
+
+This command creates a chart directory along with the common files and
+directories used in a chart.
+
+For example, 'helm create foo' will create a directory structure that looks
+something like this:
+
+    foo/
+    ├── .helmignore   # Contains patterns to ignore when packaging Helm charts.
+    ├── Chart.yaml    # Information about your chart
+    ├── values.yaml   # The default values for your templates
+    ├── charts/       # Charts that this chart depends on
+    └── templates/    # The template files
+        └── tests/    # The test files
+
+'helm create' takes a path for an argument. If directories in the given path
+do not exist, Helm will attempt to create them as it goes. If the given
+destination exists and there are files in that directory, conflicting files
+will be overwritten, but other files will be left alone.
+
+Usage:
+  helm create NAME [flags]
+
+Flags:
+  -h, --help             help for create
+  -p, --starter string   the name or absolute path to Helm starter scaffold
+
+Global Flags:
+      --burst-limit int                 client-side default throttling limit (default 100)
+      --debug                           enable verbose output
+      --kube-apiserver string           the address and the port for the Kubernetes API server
+      --kube-as-group stringArray       group to impersonate for the operation, this flag can be repeated to specify multiple groups.
+      --kube-as-user string             username to impersonate for the operation
+      --kube-ca-file string             the certificate authority file for the Kubernetes API server connection
+      --kube-context string             name of the kubeconfig context to use
+      --kube-insecure-skip-tls-verify   if true, the Kubernetes API server's certificate will not be checked for validity. This will make your HTTPS connections insecure
+      --kube-tls-server-name string     server name to use for Kubernetes API server certificate validation. If it is not provided, the hostname used to contact the server is used
+      --kube-token string               bearer token used for authentication
+      --kubeconfig string               path to the kubeconfig file
+  -n, --namespace string                namespace scope for this request
+      --registry-config string          path to the registry config file (default "C:\\Users\\os2ma\\AppData\\Roaming\\helm\\registry\\config.json")
+      --repository-cache string         path to the file containing cached repository indexes (default "C:\\Users\\os2ma\\AppData\\Local\\Temp\\helm\\repository")
+      --repository-config string        path to the file containing repository names and URLs (default "C:\\Users\\os2ma\\AppData\\Roaming\\helm\\repositories.yaml")
+
+  󱑍 20:33    devtopc   C:\ztmp   helm create mychart
+Creating mychart
+
+  󱑍 20:34    devtopc   C:\ztmp   ls
+
+
+    Directory: C:\ztmp
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----          2/1/2024   8:34 PM                mychart
+d-----        12/14/2023   2:28 PM                zookeeper
+
+
+
+  󱑍 20:34    devtopc   C:\ztmp   kubectl get nodes
+NAME           STATUS   ROLES           AGE   VERSION
+minikube       Ready    control-plane   12h   v1.28.3
+minikube-m02   Ready    <none>          12h   v1.28.3
+minikube-m03   Ready    <none>          12h   v1.28.3
+
+╭─  󱑍 10:02    devtopc   C:\ztmp 
+╰─
+
+╭─  󱑍 10:30    devtopc   C:\ztmp 
+╰─ kubectl rollout status
+error: required resource not specified
+
+╭─  󱑍 10:30    devtopc   C:\ztmp ✗
+╰─ kubectl rollout status deployment nginx-deployment
+deployment "nginx-deployment" successfully rolled out
+
+╭─  󱑍 10:30    devtopc   C:\ztmp 
+╰─ kubectl rollout status deployment nginx-deployment -w
+deployment "nginx-deployment" successfully rolled out
+
+╭─  󱑍 10:30    devtopc   C:\ztmp 
+╰─ kubectl rollout status deployment --help
+Show the status of the rollout.
+
+ By default 'rollout status' will watch the status of the latest rollout until it's done. If you don't want to wait for
+the rollout to finish then you can use --watch=false. Note that if a new rollout starts in-between, then 'rollout
+status' will continue watching the latest revision. If you want to pin to a specific revision and abort if it is rolled
+over by another revision, use --revision=N where N is the revision you need to watch for.
+
+Examples:
+  # Watch the rollout status of a deployment
+  kubectl rollout status deployment/nginx
+
+Options:
+    -f, --filename=[]:
+        Filename, directory, or URL to files identifying the resource to get from a server.
+
+    -k, --kustomize='':
+        Process the kustomization directory. This flag can't be used together with -f or -R.
+
+    -R, --recursive=false:
+        Process the directory used in -f, --filename recursively. Useful when you want to manage related manifests
+        organized within the same directory.
+
+    --revision=0:
+        Pin to a specific revision for showing its status. Defaults to 0 (last revision).
+
+    -l, --selector='':
+        Selector (label query) to filter on, supports '=', '==', and '!='.(e.g. -l key1=value1,key2=value2). Matching
+        objects must satisfy all of the specified label constraints.
+
+    --timeout=0s:
+        The length of time to wait before ending watch, zero means never. Any other values should contain a
+        corresponding time unit (e.g. 1s, 2m, 3h).
+
+    -w, --watch=true:
+        Watch the status of the rollout until it's done.
+
+Usage:
+  kubectl rollout status (TYPE NAME | TYPE/NAME) [flags] [options]
+
+Use "kubectl options" for a list of global command-line options (applies to all commands).
+
+╭─  󱑍 10:30    devtopc   C:\ztmp 
+╰─
+
+╭─  󱑍 10:31    devtopc   C:\ztmp 
+╰─ kubectl rollout status deployment nginx-deployment -w
+deployment "nginx-deployment" successfully rolled out
+
+╭─  󱑍 10:31    devtopc   C:\ztmp 
+╰─ kubectl rollout status deployment nginx-deployment -w
+deployment "nginx-deployment" successfully rolled out
+
+╭─  󱑍 10:31    devtopc   C:\ztmp 
+╰─ minikube ssh --help
+W0202 12:17:38.104451   26584 main.go:291] Unable to resolve the current Docker CLI context "default": context "default": context not found: open C:\Users\os2ma\.docker\contexts\meta\37a8eec1ce19687d132fe29051dca629d164e2c4958ba141d5f4133a33f0688f\meta.json: The system cannot find the path specified.
+Log into or run a command on a machine with SSH; similar to 'docker-machine ssh'.
+
+Options:
+    --native-ssh=true:
+        Use native Golang SSH client (default true). Set to 'false' to use the command line 'ssh' command when
+        accessing the docker machine. Useful for the machine drivers when they will not start with 'Waiting for SSH'.
+
+    -n, --node='':
+        The node to ssh into. Defaults to the primary control plane.
+
+Usage:
+  minikube ssh [flags] [options]
+
+Use "minikube options" for a list of global command-line options (applies to all commands).
+
+╭─  󱑍 12:17    devtopc   C:\ztmp 
+╰─ minikube ssh -n m02
+W0202 12:17:56.979972   40536 main.go:291] Unable to resolve the current Docker CLI context "default": context "default": context not found: open C:\Users\os2ma\.docker\contexts\meta\37a8eec1ce19687d132fe29051dca629d164e2c4958ba141d5f4133a33f0688f\meta.json: The system cannot find the path specified.
+docker@minikube-m02:~$ docker
+
+Usage:  docker [OPTIONS] COMMAND
+
+A self-sufficient runtime for containers
+
+Common Commands:
+  run         Create and run a new container from an image
+  exec        Execute a command in a running container
+  ps          List containers
+  build       Build an image from a Dockerfile
+  pull        Download an image from a registry
+  push        Upload an image to a registry
+  images      List images
+  login       Log in to a registry
+  logout      Log out from a registry
+  search      Search Docker Hub for images
+  version     Show the Docker version information
+  info        Display system-wide information
+
+Management Commands:
+  builder     Manage builds
+  buildx*     Docker Buildx (Docker Inc., v0.11.2)
+  checkpoint  Manage checkpoints
+  container   Manage containers
+  context     Manage contexts
+  image       Manage images
+  manifest    Manage Docker image manifests and manifest lists
+  network     Manage networks
+  plugin      Manage plugins
+  system      Manage Docker
+  trust       Manage trust on Docker images
+  volume      Manage volumes
+
+Swarm Commands:
+  config      Manage Swarm configs
+  node        Manage Swarm nodes
+  secret      Manage Swarm secrets
+  service     Manage Swarm services
+  stack       Manage Swarm stacks
+  swarm       Manage Swarm
+
+Commands:
+  attach      Attach local standard input, output, and error streams to a running container
+  commit      Create a new image from a container's changes
+  cp          Copy files/folders between a container and the local filesystem
+  create      Create a new container
+  diff        Inspect changes to files or directories on a container's filesystem
+  events      Get real time events from the server
+  export      Export a container's filesystem as a tar archive
+  history     Show the history of an image
+  import      Import the contents from a tarball to create a filesystem image
+  inspect     Return low-level information on Docker objects
+  kill        Kill one or more running containers
+  load        Load an image from a tar archive or STDIN
+  logs        Fetch the logs of a container
+  pause       Pause all processes within one or more containers
+  port        List port mappings or a specific mapping for the container
+  rename      Rename a container
+  restart     Restart one or more containers
+  rm          Remove one or more containers
+  rmi         Remove one or more images
+  save        Save one or more images to a tar archive (streamed to STDOUT by default)
+  start       Start one or more stopped containers
+  stats       Display a live stream of container(s) resource usage statistics
+  stop        Stop one or more running containers
+  tag         Create a tag TARGET_IMAGE that refers to SOURCE_IMAGE
+  top         Display the running processes of a container
+  unpause     Unpause all processes within one or more containers
+  update      Update configuration of one or more containers
+  wait        Block until one or more containers stop, then print their exit codes
+
+Global Options:
+      --config string      Location of client config files (default
+                           "/home/docker/.docker")
+  -c, --context string     Name of the context to use to connect to the
+                           daemon (overrides DOCKER_HOST env var and
+                           default context set with "docker context use")
+  -D, --debug              Enable debug mode
+  -H, --host list          Daemon socket to connect to
+  -l, --log-level string   Set the logging level ("debug", "info",
+                           "warn", "error", "fatal") (default "info")
+      --tls                Use TLS; implied by --tlsverify
+      --tlscacert string   Trust certs signed only by this CA (default
+                           "/home/docker/.docker/ca.pem")
+      --tlscert string     Path to TLS certificate file (default
+                           "/home/docker/.docker/cert.pem")
+      --tlskey string      Path to TLS key file (default
+                           "/home/docker/.docker/key.pem")
+      --tlsverify          Use TLS and verify the remote
+  -v, --version            Print version information and quit
+
+Run 'docker COMMAND --help' for more information on a command.
+
+For more help on how to use Docker, head to https://docs.docker.com/go/guides/
+docker@minikube-m02:~$ docker ps
+Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?
+docker@minikube-m02:~$ podman
+Error: missing command 'podman COMMAND'
+Try 'podman --help' for more information.
+docker@minikube-m02:~$ podman ps
+Error: command required for rootless mode with multiple IDs: exec: "newuidmap": executable file not found in $PATH
+docker@minikube-m02:~$ sudo podman ps
+CONTAINER ID  IMAGE       COMMAND     CREATED     STATUS      PORTS       NAMES
+docker@minikube-m02:~$ ps -ef
+UID          PID    PPID  C STIME TTY          TIME CMD
+root           1       0  0 01:26 ?        00:00:00 /sbin/init
+root         219       1  0 01:26 ?        00:00:00 /lib/systemd/systemd-journal
+root         277       1  0 01:26 ?        00:00:00 sshd: /usr/sbin/sshd -D [lis
+root         927       1  0 01:27 ?        00:01:51 /usr/bin/crio
+root        1110       1  0 01:27 ?        00:08:05 /var/lib/minikube/binaries/v
+root        1185       1  0 01:27 ?        00:00:00 /usr/bin/conmon -b /run/cont
+root        1198    1185  0 01:27 ?        00:00:08 /usr/local/bin/kube-proxy --
+root        1205       1  0 01:27 ?        00:00:00 /usr/bin/conmon -b /run/cont
+root        1216    1205  0 01:27 ?        00:00:11 /bin/kindnetd
+root        9784       1  0 13:18 ?        00:00:00 /usr/bin/conmon -b /run/cont
+1001        9796    9784  0 13:18 ?        00:00:01 /dashboard --insecure-bind-a
+root       10271       1  0 13:41 ?        00:00:00 /usr/bin/conmon -b /run/cont
+root       10283   10271  0 13:41 ?        00:00:00 nginx: master process nginx
+_rpc       10331   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10332   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10333   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10334   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10335   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10336   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10337   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10338   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10339   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10340   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10341   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10342   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10343   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10344   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10345   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10346   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10347   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10348   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10349   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10350   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10351   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10352   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10353   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10354   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10355   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10356   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10357   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10358   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10359   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10360   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10361   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10362   10283  0 13:41 ?        00:00:00 nginx: worker process
+root       12881     927  0 15:07 pts/1    00:00:00 /usr/lib/cri-o-runc/sbin/run
+root       12891   12881  0 15:07 pts/0    00:00:00 sh
+root       12907   12891  0 15:07 pts/0    00:00:00 bash
+root       13289       1  0 15:29 ?        00:00:00 /usr/bin/conmon -b /run/cont
+root       13301   13289  0 15:29 ?        00:00:00 nginx: master process nginx
+_rpc       13348   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13349   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13350   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13351   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13352   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13353   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13354   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13355   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13356   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13357   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13358   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13359   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13360   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13361   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13362   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13365   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13366   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13367   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13368   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13369   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13370   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13371   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13372   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13373   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13374   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13375   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13376   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13377   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13378   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13379   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13380   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13381   13301  0 15:29 ?        00:00:00 nginx: worker process
+root       13866     277  0 16:08 ?        00:00:00 sshd: docker [priv]
+docker     13868   13866  0 16:08 ?        00:00:00 sshd: docker@pts/2
+docker     13869   13868  0 16:08 pts/2    00:00:00 -bash
+docker     13995   13869  0 16:09 pts/2    00:00:00 ps -ef
+docker@minikube-m02:~$ ifconfig
+-bash: ifconfig: command not found
+docker@minikube-m02:~$ ip
+Usage: ip [ OPTIONS ] OBJECT { COMMAND | help }
+       ip [ -force ] -batch filename
+where  OBJECT := { address | addrlabel | fou | help | ila | ioam | l2tp | link |
+                   macsec | maddress | monitor | mptcp | mroute | mrule |
+                   neighbor | neighbour | netconf | netns | nexthop | ntable |
+                   ntbl | route | rule | sr | tap | tcpmetrics |
+                   token | tunnel | tuntap | vrf | xfrm }
+       OPTIONS := { -V[ersion] | -s[tatistics] | -d[etails] | -r[esolve] |
+                    -h[uman-readable] | -iec | -j[son] | -p[retty] |
+                    -f[amily] { inet | inet6 | mpls | bridge | link } |
+                    -4 | -6 | -M | -B | -0 |
+                    -l[oops] { maximum-addr-flush-attempts } | -br[ief] |
+                    -o[neline] | -t[imestamp] | -ts[hort] | -b[atch] [filename] |
+                    -rc[vbuf] [size] | -n[etns] name | -N[umeric] | -a[ll] |
+                    -c[olor]}
+docker@minikube-m02:~$ ip a
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host
+       valid_lft forever preferred_lft forever
+2: eth0@if58: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+    link/ether a2:cc:b5:74:c9:30 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+    inet 192.168.49.3/24 brd 192.168.49.255 scope global eth0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::a0cc:b5ff:fe74:c930/64 scope link
+       valid_lft forever preferred_lft forever
+3: docker0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN group default
+    link/ether 02:42:4a:7c:cc:1b brd ff:ff:ff:ff:ff:ff
+    inet 172.17.0.1/16 brd 172.17.255.255 scope global docker0
+       valid_lft forever preferred_lft forever
+10: veth74de8c6f@if2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default
+    link/ether 2a:c5:39:74:93:be brd ff:ff:ff:ff:ff:ff link-netns 36d7d4db-0503-4731-9502-ca98cf6cabf6
+    inet 10.244.1.1/32 scope global veth74de8c6f
+       valid_lft forever preferred_lft forever
+    inet6 fe80::28c5:39ff:fe74:93be/64 scope link
+       valid_lft forever preferred_lft forever
+11: veth27d9c297@if2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default
+    link/ether 3e:b3:73:1a:34:e0 brd ff:ff:ff:ff:ff:ff link-netns 06d44e18-b1f4-43e8-b8ba-732d7cb8b4b8
+    inet 10.244.1.1/32 scope global veth27d9c297
+       valid_lft forever preferred_lft forever
+    inet6 fe80::3cb3:73ff:fe1a:34e0/64 scope link
+       valid_lft forever preferred_lft forever
+21: vethe6286288@if2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default
+    link/ether 72:fc:87:eb:68:8b brd ff:ff:ff:ff:ff:ff link-netns 5b4270a9-a9b0-49c4-a0e9-f11bd8429643
+    inet 10.244.1.1/32 scope global vethe6286288
+       valid_lft forever preferred_lft forever
+    inet6 fe80::70fc:87ff:feeb:688b/64 scope link
+       valid_lft forever preferred_lft forever
+docker@minikube-m02:~$ top
+top - 16:11:05 up 1 day,  2:05,  0 users,  load average: 0.22, 0.21, 0.18
+Tasks:  86 total,   1 running,  85 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  0.1 us,  0.1 sy,  0.0 ni, 99.8 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+MiB Mem :  15801.9 total,   5957.6 free,   1954.5 used,   7889.8 buff/cache
+MiB Swap:   4096.0 total,   4096.0 free,      0.0 used.  13486.0 avail Mem
+
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+   1110 root      20   0 2523892 117580  66884 S   0.3   0.7   8:05.96 kubelet
+   1198 root      20   0  768332  57272  36260 S   0.3   0.4   0:08.93 kube-pr+
+      1 root      20   0   18660  11388   8072 S   0.0   0.1   0:00.52 systemd
+    219 root      19  -1   23440  13916  12600 S   0.0   0.1   0:00.78 systemd+
+    277 root      20   0   15420   9516   7884 S   0.0   0.1   0:00.00 sshd
+    927 root      20   0 2451796  82328  40104 S   0.0   0.5   1:51.56 crio
+   1185 root      20   0   82736   2144   1832 S   0.0   0.0   0:00.00 conmon
+   1205 root      20   0   82736   2020   1708 S   0.0   0.0   0:00.44 conmon
+   1216 root      20   0  742896  36904  20296 S   0.0   0.2   0:11.11 kindnetd
+   9784 root      20   0   82736   2088   1772 S   0.0   0.0   0:00.01 conmon
+   9796 1001      20   0  751676  46800  27644 S   0.0   0.3   0:01.81 dashboa+
+  10271 root      20   0   82736   1932   1624 S   0.0   0.0   0:00.00 conmon
+  10283 root      20   0   11392   7736   6492 S   0.0   0.0   0:00.00 nginx
+  10331 _rpc      20   0   11864   2664   1092 S   0.0   0.0   0:00.00 nginx
+  10332 _rpc      20   0   11864   2664   1092 S   0.0   0.0   0:00.00 nginx
+  10333 _rpc      20   0   11864   2664   1092 S   0.0   0.0   0:00.00 nginx
+  10334 _rpc      20   0   11864   2664   1092 S   0.0   0.0   0:00.00 nginx
+
+docker@minikube-m02:~$ ps -ef
+UID          PID    PPID  C STIME TTY          TIME CMD
+root           1       0  0 01:26 ?        00:00:00 /sbin/init
+root         219       1  0 01:26 ?        00:00:00 /lib/systemd/systemd-journal
+root         277       1  0 01:26 ?        00:00:00 sshd: /usr/sbin/sshd -D [lis
+root         927       1  0 01:27 ?        00:01:51 /usr/bin/crio
+root        1110       1  0 01:27 ?        00:08:05 /var/lib/minikube/binaries/v
+root        1185       1  0 01:27 ?        00:00:00 /usr/bin/conmon -b /run/cont
+root        1198    1185  0 01:27 ?        00:00:08 /usr/local/bin/kube-proxy --
+root        1205       1  0 01:27 ?        00:00:00 /usr/bin/conmon -b /run/cont
+root        1216    1205  0 01:27 ?        00:00:11 /bin/kindnetd
+root        9784       1  0 13:18 ?        00:00:00 /usr/bin/conmon -b /run/cont
+1001        9796    9784  0 13:18 ?        00:00:01 /dashboard --insecure-bind-a
+root       10271       1  0 13:41 ?        00:00:00 /usr/bin/conmon -b /run/cont
+root       10283   10271  0 13:41 ?        00:00:00 nginx: master process nginx
+_rpc       10331   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10332   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10333   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10334   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10335   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10336   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10337   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10338   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10339   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10340   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10341   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10342   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10343   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10344   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10345   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10346   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10347   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10348   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10349   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10350   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10351   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10352   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10353   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10354   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10355   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10356   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10357   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10358   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10359   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10360   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10361   10283  0 13:41 ?        00:00:00 nginx: worker process
+_rpc       10362   10283  0 13:41 ?        00:00:00 nginx: worker process
+root       12881     927  0 15:07 pts/1    00:00:00 /usr/lib/cri-o-runc/sbin/run
+root       12891   12881  0 15:07 pts/0    00:00:00 sh
+root       12907   12891  0 15:07 pts/0    00:00:00 bash
+root       13289       1  0 15:29 ?        00:00:00 /usr/bin/conmon -b /run/cont
+root       13301   13289  0 15:29 ?        00:00:00 nginx: master process nginx
+_rpc       13348   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13349   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13350   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13351   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13352   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13353   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13354   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13355   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13356   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13357   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13358   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13359   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13360   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13361   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13362   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13365   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13366   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13367   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13368   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13369   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13370   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13371   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13372   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13373   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13374   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13375   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13376   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13377   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13378   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13379   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13380   13301  0 15:29 ?        00:00:00 nginx: worker process
+_rpc       13381   13301  0 15:29 ?        00:00:00 nginx: worker process
+root       13866     277  0 16:08 ?        00:00:00 sshd: docker [priv]
+docker     13868   13866  0 16:08 ?        00:00:00 sshd: docker@pts/2
+docker     13869   13868  0 16:08 pts/2    00:00:00 -bash
+docker     14010   13869  0 16:11 pts/2    00:00:00 ps -ef
+docker@minikube-m02:~$ crio
+INFO[2024-02-01 16:12:09.972881377Z] Starting CRI-O, version: 1.24.6, git: 4bfe15a9feb74ffc95e66a21c04b15fa7bbc2b90(clean)
+INFO[2024-02-01 16:12:09.972994114Z] Node configuration value for hugetlb cgroup is true
+INFO[2024-02-01 16:12:09.973007434Z] Node configuration value for pid cgroup is true
+INFO[2024-02-01 16:12:09.973014490Z] Node configuration value for memoryswap cgroup is true
+INFO[2024-02-01 16:12:09.973025688Z] Node configuration value for cgroup v2 is false
+WARN[2024-02-01 16:12:09.975753293Z] node configuration validation for systemd CollectMode failed: check systemd CollectMode: exit status 1
+INFO[2024-02-01 16:12:09.975772277Z] Node configuration value for systemd CollectMode is false
+WARN[2024-02-01 16:12:09.976663618Z] node configuration validation for systemd AllowedCPUs failed: check systemd AllowedCPUs: exit status 1
+INFO[2024-02-01 16:12:09.976683543Z] Node configuration value for systemd AllowedCPUs is false
+FATA[2024-02-01 16:12:09.976810214Z] validating root config: invalid log_dir: mkdir /var/log/crio/pods: permission denied
+docker@minikube-m02:~$ crio --help
+NAME:
+   crio - OCI-based implementation of Kubernetes Container Runtime Interface
+
+USAGE:
+   OCI-based implementation of Kubernetes Container Runtime Interface Daemon
+
+crio is meant to provide an integration path between OCI conformant runtimes
+and the kubelet. Specifically, it implements the Kubelet Container Runtime
+Interface (CRI) using OCI conformant runtimes. The scope of crio is tied to the
+scope of the CRI.
+
+1. Support multiple image formats including the existing Docker and OCI image formats.
+2. Support for multiple means to download images including trust & image verification.
+3. Container image management (managing image layers, overlay filesystems, etc).
+4. Container process lifecycle management.
+5. Monitoring and logging required to satisfy the CRI.
+6. Resource isolation as required by the CRI.
+
+VERSION:
+   1.24.6
+Version:          1.24.6
+GitCommit:        4bfe15a9feb74ffc95e66a21c04b15fa7bbc2b90
+GitTreeState:     clean
+BuildDate:        2023-06-14T14:44:50Z
+GoVersion:        go1.18.2
+Compiler:         gc
+Platform:         linux/amd64
+Linkmode:         dynamic
+BuildTags:        apparmor, exclude_graphdriver_devicemapper, containers_image_ostree_stub, seccomp
+SeccompEnabled:   true
+AppArmorEnabled:  false
+
+DESCRIPTION:
+   OCI-based implementation of Kubernetes Container Runtime Interface
+
+AUTHOR:
+   The CRI-O Maintainers
+
+COMMANDS:
+   complete, completion  Generate bash, fish or zsh completions.
+   man                   Generate the man page documentation.
+   markdown, md          Generate the markdown documentation.
+   config                Outputs a commented version of the configuration file that could be used
+by CRI-O. This allows you to save you current configuration setup and then load
+it later with **--config**. Global options will modify the output.
+   version  display detailed version information
+   wipe     wipe CRI-O's container and image storage
+   help, h  Shows a list of commands or help for one command
+
+GLOBAL OPTIONS:
+   --absent-mount-sources-to-reject value  A list of paths that, when absent from the host, will cause a container creation to fail (as opposed to the current behavior of creating a directory). [$CONTAINER_ABSENT_MOUNT_SOURCES_TO_REJECT]
+   --add-inheritable-capabilities          Add capabilities to the inheritable set, as well as the default group of permitted, bounding and effective. (default: true) [$CONTAINER_ADD_INHERITABLE_CAPABILITIES]
+   --additional-devices value              Devices to add to the containers [$CONTAINER_ADDITIONAL_DEVICES]
+   --allowed-devices value                 Devices a user is allowed to specify with the "io.kubernetes.cri-o.Devices" allowed annotation (default: "/dev/fuse") [$CONTAINER_ALLOWED_DEVICES]
+   --apparmor-profile value                Name of the apparmor profile to be used as the runtime's default. This only takes effect if the user does not specify a profile via the Kubernetes Pod's metadata annotation. (default: "crio-default") [$CONTAINER_APPARMOR_PROFILE]
+   --big-files-temporary-dir value         Path to the temporary directory to use for storing big files, used to store image blobs and data streams related to containers image management. [$CONTAINER_BIG_FILES_TEMPORARY_DIR]
+   --bind-mount-prefix /                   A prefix to use for the source of the bind mounts. This option would be useful if you were running CRI-O in a container. And had / mounted on `/host` in your container. Then if you ran CRI-O with the `--bind-mount-prefix=/host` option, CRI-O would add /host to any bind mounts it is handed over CRI. If Kubernetes asked to have `/var/lib/foobar` bind mounted into the container, then CRI-O would bind mount `/host/var/lib/foobar`. Since CRI-O itself is running in a container with `/` or the host mounted on `/host`, the container would end up with `/var/lib/foobar` from the host mounted in the container rather then `/var/lib/foobar` from the CRI-O container. (default: "") [$CONTAINER_BIND_MOUNT_PREFIX]
+   --blockio-config-file value             Path to the blockio class configuration file for configuring the cgroup blockio controller.
+   --cdi-spec-dirs value                   Directories to scan for CDI Spec files (default: "/etc/cdi", "/var/run/cdi") [$CONTAINER_CDI_SPEC_DIRS]
+   --cgroup-manager value                  cgroup manager (cgroupfs or systemd) (default: "systemd") [$CONTAINER_CGROUP_MANAGER]
+   --clean-shutdown-file value             Location for CRI-O to lay down the clean shutdown file. It indicates whether we've had time to sync changes to disk before shutting down. If not found, crio wipe will clear the storage directory (default: "/var/lib/crio/clean.shutdown") [$CONTAINER_CLEAN_SHUTDOWN_FILE]
+   --cni-config-dir value                  CNI configuration files directory (default: "/etc/cni/net.d/") [$CONTAINER_CNI_CONFIG_DIR]
+   --cni-default-network value             Name of the default CNI network to select. If not set or "", then CRI-O will pick-up the first one found in --cni-config-dir. [$CONTAINER_CNI_DEFAULT_NETWORK]
+   --cni-plugin-dir value                  CNI plugin binaries directory [$CONTAINER_CNI_PLUGIN_DIR]
+   --config value, -c value                Path to configuration file (default: "/etc/crio/crio.conf") [$CONTAINER_CONFIG]
+   --config-dir value, -d value            Path to the configuration drop-in directory.
+    This directory will be recursively iterated and each file gets applied
+    to the configuration in their processing order. This means that a
+    configuration file named '00-default' has a lower priority than a file
+    named '01-my-overwrite'.
+    The global config file, provided via '--config,-c' or per default in
+    /etc/crio/crio.conf, always has a lower priority than the files in the directory specified
+    by '--config-dir,-d'.
+    Besides that, provided command line parameters have a higher priority
+    than any configuration file. (default: "/etc/crio/crio.conf.d") [$CONTAINER_CONFIG_DIR]
+   --conmon value                            Path to the conmon binary, used for monitoring the OCI runtime. Will be searched for using $PATH if empty. This option is deprecated, and will be removed in the future. (default: "") [$CONTAINER_CONMON]
+   --conmon-cgroup value                     cgroup to be used for conmon process. This option is deprecated and will be removed in the future. [$CONTAINER_CONMON_CGROUP]
+   --conmon-env value                        Environment variable list for the conmon process, used for passing necessary environment variables to conmon or the runtime. This option is deprecated and will be removed in the future. [$CONTAINER_CONMON_ENV]
+   --container-attach-socket-dir value       Path to directory for container attach sockets (default: "/var/run/crio") [$CONTAINER_ATTACH_SOCKET_DIR]
+   --container-exits-dir value               Path to directory in which container exit files are written to by conmon (default: "/var/run/crio/exits") [$CONTAINER_EXITS_DIR]
+   --ctr-stop-timeout value                  The minimal amount of time in seconds to wait before issuing a timeout regarding the proper termination of the container. The lowest possible value is 30s, whereas lower values are not considered by CRI-O (default: 30) [$CONTAINER_STOP_TIMEOUT]
+   --decryption-keys-path value              Path to load keys for image decryption. (default: "/etc/crio/keys/")
+   --default-capabilities value              Capabilities to add to the containers (default: "CHOWN", "DAC_OVERRIDE", "FSETID", "FOWNER", "SETGID", "SETUID", "SETPCAP", "NET_BIND_SERVICE", "KILL") [$CONTAINER_DEFAULT_CAPABILITIES]
+   --default-env value                       Additional environment variables to set for all containers [$CONTAINER_DEFAULT_ENV]
+   --default-mounts-file value               Path to default mounts file (default: "") [$CONTAINER_DEFAULT_MOUNTS_FILE]
+   --default-runtime value                   Default OCI runtime from the runtimes config (default: "runc") [$CONTAINER_DEFAULT_RUNTIME]
+   --default-sysctls value                   Sysctls to add to the containers [$CONTAINER_DEFAULT_SYSCTLS]
+   --default-transport value                 A prefix to prepend to image names that cannot be pulled as-is (default: "docker://") [$CONTAINER_DEFAULT_TRANSPORT]
+   --default-ulimits value                   Ulimits to apply to containers by default (name=soft:hard) (default: []) [$CONTAINER_DEFAULT_ULIMITS]
+   --device-ownership-from-security-context  Set devices' uid/gid ownership from runAsUser/runAsGroup (default: false)
+   --drop-infra-ctr                          Determines whether pods are created without an infra container, when the pod is not using a pod level PID namespace (default: true) (default: false) [$CONTAINER_DROP_INFRA_CTR]
+   --enable-metrics                          Enable metrics endpoint for the server on localhost:9090 (default: false) [$CONTAINER_ENABLE_METRICS]
+   --enable-profile-unix-socket              Enable pprof profiler on crio unix domain socket (default: false) [$ENABLE_PROFILE_UNIX_SOCKET]
+   --enable-tracing                          Enable OpenTelemetry trace data exporting (default: false) [$CONTAINER_ENABLE_TRACING]
+   --gid-mappings value                      Specify the GID mappings to use for the user namespace (default: "") [$CONTAINER_GID_MAPPINGS]
+   --global-auth-file value                  Path to a file like /var/lib/kubelet/config.json holding credentials necessary for pulling images from secure registries (default: "") [$CONTAINER_GLOBAL_AUTH_FILE]
+   --grpc-max-recv-msg-size value            Maximum grpc receive message size in bytes (default: 83886080) [$CONTAINER_GRPC_MAX_RECV_MSG_SIZE]
+   --grpc-max-send-msg-size value            Maximum grpc receive message size (default: 83886080) [$CONTAINER_GRPC_MAX_SEND_MSG_SIZE]
+   --hooks-dir value                         Set the OCI hooks directory path (may be set multiple times)
+    If one of the directories does not exist, then CRI-O will automatically
+    skip them.
+    Each '\*.json' file in the path configures a hook for CRI-O
+    containers. For more details on the syntax of the JSON files and
+    the semantics of hook injection, see 'oci-hooks(5)'. CRI-O
+    currently support both the 1.0.0 and 0.1.0 hook schemas, although
+    the 0.1.0 schema is deprecated.
+    This option may be set multiple times; paths from later options
+    have higher precedence ('oci-hooks(5)' discusses directory
+    precedence).
+    For the annotation conditions, CRI-O uses the Kubernetes
+    annotations, which are a subset of the annotations passed to the
+    OCI runtime. For example, 'io.kubernetes.cri-o.Volumes' is part of
+    the OCI runtime configuration annotations, but it is not part of
+    the Kubernetes annotations being matched for hooks.
+    For the bind-mount conditions, only mounts explicitly requested by
+    Kubernetes configuration are considered. Bind mounts that CRI-O
+    inserts by default (e.g. '/dev/shm') are not considered. (default: "/usr/share/containers/oci/hooks.d") [$CONTAINER_HOOKS_DIR]
+   --image-volumes value  Image volume handling ('mkdir', 'bind', or 'ignore')
+    1. mkdir: A directory is created inside the container root filesystem for
+       the volumes.
+    2. bind: A directory is created inside container state directory and bind
+       mounted into the container for the volumes.
+                              3. ignore: All volumes are just ignored and no action is taken. (default: "mkdir") [$CONTAINER_IMAGE_VOLUMES]
+   --infra-ctr-cpuset value   CPU set to run infra containers, if not specified CRI-O will use all online CPUs to run infra containers (default: ''). [$CONTAINER_INFRA_CTR_CPUSET]
+   --insecure-registry value  Enable insecure registry communication, i.e., enable un-encrypted and/or untrusted communication.
+    1. List of insecure registries can contain an element with CIDR notation to
+       specify a whole subnet.
+    2. Insecure registries accept HTTP or accept HTTPS with certificates from
+       unknown CAs.
+    3. Enabling '--insecure-registry' is useful when running a local registry.
+       However, because its use creates security vulnerabilities, **it should ONLY
+       be enabled for testing purposes**. For increased security, users should add
+       their CA to their system's list of trusted CAs instead of using
+       '--insecure-registry'. [$CONTAINER_INSECURE_REGISTRY]
+   --internal-wipe crio wipe                  Whether CRI-O should wipe containers after a reboot and images after an upgrade when the server starts. If set to false, one must run crio wipe to wipe the containers and images in these situations. This option is deprecated, and will be removed in the future. (default: true) [$CONTAINER_INTERNAL_WIPE]
+   --irqbalance-config-file value             The irqbalance service config file which is used by CRI-O. (default: "/etc/sysconfig/irqbalance")
+   --listen value                             Path to the CRI-O socket (default: "/var/run/crio/crio.sock") [$CONTAINER_LISTEN]
+   --log value                                Set the log file path where internal debug information is written [$CONTAINER_LOG]
+   --log-dir value                            Default log directory where all logs will go unless directly specified by the kubelet (default: "/var/log/crio/pods") [$CONTAINER_LOG_DIR]
+   --log-filter value                         Filter the log messages by the provided regular expression. For example 'request.\*' filters all gRPC requests. [$CONTAINER_LOG_FILTER]
+   --log-format value                         Set the format used by logs: 'text' or 'json' (default: "text") [$CONTAINER_LOG_FORMAT]
+   --log-journald                             Log to systemd journal (journald) in addition to kubernetes log file (default: false) (default: false) [$CONTAINER_LOG_JOURNALD]
+   --log-level value, -l value                Log messages above specified level: trace, debug, info, warn, error, fatal or panic (default: "info") [$CONTAINER_LOG_LEVEL]
+   --log-size-max value                       Maximum log size in bytes for a container. If it is positive, it must be >= 8192 to match/exceed conmon read buffer. This option is deprecated. The Kubelet flag '--container-log-max-size' should be used instead. (default: -1) [$CONTAINER_LOG_SIZE_MAX]
+   --metrics-cert value                       Certificate for the secure metrics endpoint [$CONTAINER_METRICS_CERT]
+   --metrics-collectors value                 Enabled metrics collectors (default: "operations", "operations_latency_microseconds_total", "operations_latency_microseconds", "operations_errors", "image_pulls_by_digest", "image_pulls_by_name", "image_pulls_by_name_skipped", "image_pulls_failures", "image_pulls_successes", "image_pulls_layer_size", "image_layer_reuse", "containers_oom_total", "containers_oom", "processes_defunct", "operations_total", "operations_latency_seconds", "operations_latency_seconds_total", "operations_errors_total", "image_pulls_bytes_total", "image_pulls_skipped_bytes_total", "image_pulls_failure_total", "image_pulls_success_total", "image_layer_reuse_total", "containers_oom_count_total") [$CONTAINER_METRICS_COLLECTORS]
+   --metrics-key value                        Certificate key for the secure metrics endpoint [$CONTAINER_METRICS_KEY]
+   --metrics-port value                       Port for the metrics endpoint (default: 9090) [$CONTAINER_METRICS_PORT]
+   --metrics-socket value                     Socket for the metrics endpoint [$CONTAINER_METRICS_SOCKET]
+   --minimum-mappable-gid value               Specify the lowest host GID which can be specified in mappings for a pod that will be run as a UID other than 0 (default: -1) [$CONTAINER_MINIMUM_MAPPABLE_GID]
+   --minimum-mappable-uid value               Specify the lowest host UID which can be specified in mappings for a pod that will be run as a UID other than 0 (default: -1) [$CONTAINER_MINIMUM_MAPPABLE_UID]
+   --namespaces-dir value                     The directory where the state of the managed namespaces gets tracked. Only used when manage-ns-lifecycle is true (default: "/var/run") [$CONTAINER_NAMESPACES_DIR]
+   --no-pivot pivot_root                      If true, the runtime will not use pivot_root, but instead use `MS_MOVE` (default: false) (default: false) [$CONTAINER_NO_PIVOT]
+   --pause-command value                      Path to the pause executable in the pause image (default: "/pause") [$CONTAINER_PAUSE_COMMAND]
+   --pause-image value                        Image which contains the pause executable (default: "registry.k8s.io/pause:3.6") [$CONTAINER_PAUSE_IMAGE]
+   --pause-image-auth-file value              Path to a config file containing credentials for --pause-image (default: "") [$CONTAINER_PAUSE_IMAGE_AUTH_FILE]
+   --pids-limit value                         Maximum number of processes allowed in a container. This option is deprecated. The Kubelet flag '--pod-pids-limit' should be used instead. (default: 0) [$CONTAINER_PIDS_LIMIT]
+   --pinns-path value                         The path to find the pinns binary, which is needed to manage namespace lifecycle. Will be searched for in $PATH if empty (default: "") [$CONTAINER_PINNS_PATH]
+   --profile                                  Enable pprof remote profiler on localhost:6060 (default: false) [$CONTAINER_PROFILE]
+   --profile-cpu value                        Write a pprof CPU profile to the provided path [$CONTAINER_PROFILE_CPU]
+   --profile-mem value                        Write a pprof memory profile to the provided path [$CONTAINER_PROFILE_MEM]
+   --profile-port value                       Port for the pprof profiler (default: 6060) [$CONTAINER_PROFILE_PORT]
+   --rdt-config-file value                    Path to the RDT configuration file for configuring the resctrl pseudo-filesystem
+   --read-only /run                           Setup all unprivileged containers to run as read-only. Automatically mounts tmpfs on /run, `/tmp` and `/var/tmp`. (default: false) (default: false) [$CONTAINER_READ_ONLY]
+   --registry value                           Registry to be prepended when pulling unqualified images, can be specified multiple times [$CONTAINER_REGISTRY]
+   --root value, -r value                     The CRI-O root directory (default: "/home/docker/.local/share/containers/storage") [$CONTAINER_ROOT]
+   --runroot value                            The CRI-O state directory (default: "/tmp/containers-user-1000/containers") [$CONTAINER_RUNROOT]
+   --runtimes value                           OCI runtimes, format is runtime_name:runtime_path:runtime_root:runtime_type:privileged_without_host_devices:runtime_config_path [$CONTAINER_RUNTIMES]
+   --seccomp-profile value                    Path to the seccomp.json profile to be used as the runtime's default. If not specified, then the internal default seccomp profile will be used. (default: "") [$CONTAINER_SECCOMP_PROFILE]
+   --seccomp-use-default-when-empty           Use the default seccomp profile when an empty one is specified (default: true) [$CONTAINER_SECCOMP_USE_DEFAULT_WHEN_EMPTY]
+   --selinux                                  Enable selinux support (default: false) (default: false) [$CONTAINER_SELINUX]
+   --separate-pull-cgroup value               [EXPERIMENTAL] Pull in new cgroup (default: "") [$PULL_IN_A_CGROUP]
+   --signature-policy value                   Path to signature policy JSON file. (default: "", to use the system-wide default) [$CONTAINER_SIGNATURE_POLICY]
+   --stats-collection-period value            The number of seconds between collecting pod and container stats. If set to 0, the stats are collected on-demand instead. (default: 0) [$CONTAINER_STATS_COLLECTION_PERIOD]
+   --storage-driver value, -s value           OCI storage driver (default: "vfs") [$CONTAINER_STORAGE_DRIVER]
+   --storage-opt value                        OCI storage driver option [$CONTAINER_STORAGE_OPT]
+   --stream-address value                     Bind address for streaming socket (default: "127.0.0.1") [$CONTAINER_STREAM_ADDRESS]
+   --stream-enable-tls                        Enable encrypted TLS transport of the stream server (default: false) (default: false) [$CONTAINER_ENABLE_TLS]
+   --stream-idle-timeout value                Length of time until open streams terminate due to lack of activity [$STREAM_IDLE_TIMEOUT]
+   --stream-port value                        Bind port for streaming socket. If the port is set to '0', then CRI-O will allocate a random free port number. (default: "0") [$CONTAINER_STREAM_PORT]
+   --stream-tls-ca value                      Path to the x509 CA(s) file used to verify and authenticate client communication with the encrypted stream. This file can change and CRI-O will automatically pick up the changes within 5 minutes (default: "") [$CONTAINER_TLS_CA]
+   --stream-tls-cert value                    Path to the x509 certificate file used to serve the encrypted stream. This file can change and CRI-O will automatically pick up the changes within 5 minutes (default: "") [$CONTAINER_TLS_CERT]
+   --stream-tls-key value                     Path to the key file used to serve the encrypted stream. This file can change and CRI-O will automatically pick up the changes within 5 minutes (default: "") [$CONTAINER_TLS_KEY]
+   --tracing-endpoint value                   Address on which the gRPC tracing collector will listen (default: "0.0.0.0:4317") [$CONTAINER_TRACING_ENDPOINT]
+   --tracing-sampling-rate-per-million value  Number of samples to collect per million OpenTelemetry spans (default: 0) [$CONTAINER_TRACING_SAMPLING_RATE_PER_MILLION]
+   --uid-mappings value                       Specify the UID mappings to use for the user namespace (default: "") [$CONTAINER_UID_MAPPINGS]
+   --version-file value                       Location for CRI-O to lay down the temporary version file. It is used to check if crio wipe should wipe containers, which should always happen on a node reboot (default: "/var/run/crio/version") [$CONTAINER_VERSION_FILE]
+   --version-file-persist value               Location for CRI-O to lay down the persistent version file. It is used to check if crio wipe should wipe images, which should only happen when CRI-O has been upgraded (default: "/var/run/crio/version") [$CONTAINER_VERSION_FILE_PERSIST]
+   --help, -h                                 show help (default: false)
+   --version, -v                              print the version (default: false)
+docker@minikube-m02:~$ sudo podman ps -a
+CONTAINER ID  IMAGE       COMMAND     CREATED     STATUS      PORTS       NAMES
+docker@minikube-m02:~$ sudo podman images
+REPOSITORY                               TAG                 IMAGE ID      CREATED        SIZE
+docker.io/osmanyay/ng-debug              v1.0.0              e96e0cf3c9ae  10 days ago    44.4 MB
+docker.io/library/nginx                  1.25.3-alpine       2b70e4aaac6b  3 months ago   44.4 MB
+docker.io/library/nginx                  1.25.3              b690f5f0a2d5  3 months ago   191 MB
+docker.io/library/nginx                  latest              a8758716bb6a  3 months ago   191 MB
+registry.k8s.io/kube-apiserver           v1.28.3             537434729123  3 months ago   127 MB
+registry.k8s.io/kube-scheduler           v1.28.3             6d1b4fd1b182  3 months ago   61.5 MB
+registry.k8s.io/kube-controller-manager  v1.28.3             10baa1ca1706  3 months ago   123 MB
+registry.k8s.io/kube-proxy               v1.28.3             bfc896cf80fb  3 months ago   74.7 MB
+docker.io/kindest/kindnetd               v20230809-80a64d96  c7d129742546  5 months ago   65.3 MB
+registry.k8s.io/etcd                     3.5.9-0             73deb9a3f702  8 months ago   295 MB
+registry.k8s.io/coredns/coredns          v1.10.1             ead0a4a53df8  11 months ago  53.6 MB
+registry.k8s.io/pause                    3.9                 e6f181688397  15 months ago  750 kB
+docker.io/kubernetesui/dashboard         <none>              07655ddf2eeb  16 months ago  249 MB
+gcr.io/k8s-minikube/storage-provisioner  v5                  6e38f40d628d  2 years ago    31.5 MB
+docker@minikube-m02:~$ exit
+logout

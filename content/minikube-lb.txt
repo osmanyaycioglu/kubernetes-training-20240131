@@ -1,0 +1,155 @@
+
+╭─  󱑍 14:09    devtopc   kubernetes-training-20240131\kubernetes    master !+
+╰─ kubectl delete -f 004-services-nodeport
+service "nginx-deployment-svc" deleted
+deployment.apps "nginx-deployment" deleted
+
+╭─  󱑍 14:10    devtopc   kubernetes-training-20240131\kubernetes    master !+
+╰─ kubectl get nodes
+NAME           STATUS   ROLES           AGE   VERSION
+minikube       Ready    control-plane   16h   v1.28.3
+minikube-m02   Ready    <none>          16h   v1.28.3
+minikube-m03   Ready    <none>          16h   v1.28.3
+
+╭─  󱑍 14:10    devtopc   kubernetes-training-20240131\kubernetes    master !+
+╰─ kubectl get pods
+NAME        READY   STATUS    RESTARTS   AGE
+nginx-pod   1/1     Running   0          4h34m
+
+╭─  󱑍 14:10    devtopc   kubernetes-training-20240131\kubernetes    master !+
+╰─ kubectl get dep
+error: the server doesn't have a resource type "dep"
+
+╭─  󱑍 14:10    devtopc   kubernetes-training-20240131\kubernetes    master !+✗
+╰─ kubectl get deployment
+No resources found in default namespace.
+
+╭─  󱑍 14:11    devtopc   kubernetes-training-20240131\kubernetes    master !+
+╰─ kubectl apply -f 004-services-lb
+service/nginx-deployment-svc created
+deployment.apps/nginx-deployment created
+
+╭─  󱑍 14:11    devtopc   kubernetes-training-20240131\kubernetes    master !+
+╰─ kubectl get all
+NAME                                    READY   STATUS    RESTARTS   AGE
+pod/nginx-deployment-55bfcb975f-9sd6m   1/1     Running   0          11s
+pod/nginx-deployment-55bfcb975f-n926j   1/1     Running   0          11s
+pod/nginx-deployment-55bfcb975f-xd5pd   1/1     Running   0          11s
+pod/nginx-pod                           1/1     Running   0          4h35m
+
+NAME                           TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+service/kubernetes             ClusterIP      10.96.0.1       <none>        443/TCP        16h
+service/nginx-deployment-svc   LoadBalancer   10.110.54.126   127.0.0.1     80:31019/TCP   11s
+
+NAME                               READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/nginx-deployment   3/3     3            3           11s
+
+NAME                                          DESIRED   CURRENT   READY   AGE
+replicaset.apps/nginx-deployment-55bfcb975f   3         3         3       11s
+
+╭─  󱑍 14:11    devtopc   kubernetes-training-20240131\kubernetes    master !+
+╰─ minikube addons list
+W0202 14:12:34.764918    2228 main.go:291] Unable to resolve the current Docker CLI context "default": context "default": context not found: open C:\Users\os2ma\.docker\contexts\meta\37a8eec1ce19687d132fe29051dca629d164e2c4958ba141d5f4133a33f0688f\meta.json: The system cannot find the path specified.
+|-----------------------------|----------|--------------|--------------------------------|
+|         ADDON NAME          | PROFILE  |    STATUS    |           MAINTAINER           |
+|-----------------------------|----------|--------------|--------------------------------|
+| ambassador                  | minikube | disabled     | 3rd party (Ambassador)         |
+| auto-pause                  | minikube | disabled     | minikube                       |
+| cloud-spanner               | minikube | disabled     | Google                         |
+| csi-hostpath-driver         | minikube | disabled     | Kubernetes                     |
+| dashboard                   | minikube | enabled ✅   | Kubernetes                     |
+| default-storageclass        | minikube | disabled     | Kubernetes                     |
+| efk                         | minikube | disabled     | 3rd party (Elastic)            |
+| freshpod                    | minikube | disabled     | Google                         |
+| gcp-auth                    | minikube | disabled     | Google                         |
+| gvisor                      | minikube | disabled     | minikube                       |
+| headlamp                    | minikube | disabled     | 3rd party (kinvolk.io)         |
+| helm-tiller                 | minikube | disabled     | 3rd party (Helm)               |
+| inaccel                     | minikube | disabled     | 3rd party (InAccel             |
+|                             |          |              | [info@inaccel.com])            |
+| ingress                     | minikube | disabled     | Kubernetes                     |
+| ingress-dns                 | minikube | disabled     | minikube                       |
+| inspektor-gadget            | minikube | disabled     | 3rd party                      |
+|                             |          |              | (inspektor-gadget.io)          |
+| istio                       | minikube | disabled     | 3rd party (Istio)              |
+| istio-provisioner           | minikube | disabled     | 3rd party (Istio)              |
+| kong                        | minikube | disabled     | 3rd party (Kong HQ)            |
+| kubeflow                    | minikube | disabled     | 3rd party                      |
+| kubevirt                    | minikube | disabled     | 3rd party (KubeVirt)           |
+| logviewer                   | minikube | disabled     | 3rd party (unknown)            |
+| metallb                     | minikube | disabled     | 3rd party (MetalLB)            |
+| metrics-server              | minikube | disabled     | Kubernetes                     |
+| nvidia-device-plugin        | minikube | disabled     | 3rd party (NVIDIA)             |
+| nvidia-driver-installer     | minikube | disabled     | 3rd party (Nvidia)             |
+| nvidia-gpu-device-plugin    | minikube | disabled     | 3rd party (Nvidia)             |
+| olm                         | minikube | disabled     | 3rd party (Operator Framework) |
+| pod-security-policy         | minikube | disabled     | 3rd party (unknown)            |
+| portainer                   | minikube | disabled     | 3rd party (Portainer.io)       |
+| registry                    | minikube | disabled     | minikube                       |
+| registry-aliases            | minikube | disabled     | 3rd party (unknown)            |
+| registry-creds              | minikube | disabled     | 3rd party (UPMC Enterprises)   |
+| storage-provisioner         | minikube | disabled     | minikube                       |
+| storage-provisioner-gluster | minikube | disabled     | 3rd party (Gluster)            |
+| storage-provisioner-rancher | minikube | disabled     | 3rd party (Rancher)            |
+| volumesnapshots             | minikube | disabled     | Kubernetes                     |
+|-----------------------------|----------|--------------|--------------------------------|
+
+╭─  󱑍 14:12    devtopc   kubernetes-training-20240131\kubernetes    master !+
+╰─ minikube addons enable metallb
+W0202 14:26:47.616204   30396 main.go:291] Unable to resolve the current Docker CLI context "default": context "default": context not found: open C:\Users\os2ma\.docker\contexts\meta\37a8eec1ce19687d132fe29051dca629d164e2c4958ba141d5f4133a33f0688f\meta.json: The system cannot find the path specified.
+❗  metallb is a 3rd party addon and is not maintained or verified by minikube maintainers, enable at your own risk.
+❗  metallb does not currently have an associated maintainer.
+    ▪ Using image quay.io/metallb/speaker:v0.9.6
+    ▪ Using image quay.io/metallb/controller:v0.9.6
+🌟  The 'metallb' addon is enabled
+
+╭─  󱑍 14:26    devtopc   kubernetes-training-20240131\kubernetes    master !+
+╰─ minikube ip
+W0202 14:26:56.996678   23676 main.go:291] Unable to resolve the current Docker CLI context "default": context "default": context not found: open C:\Users\os2ma\.docker\contexts\meta\37a8eec1ce19687d132fe29051dca629d164e2c4958ba141d5f4133a33f0688f\meta.json: The system cannot find the path specified.
+192.168.49.2
+
+╭─  󱑍 14:26    devtopc   kubernetes-training-20240131\kubernetes    master !+
+╰─  minikube addons configure metallb
+W0202 14:27:26.751893    3688 main.go:291] Unable to resolve the current Docker CLI context "default": context "default": context not found: open C:\Users\os2ma\.docker\contexts\meta\37a8eec1ce19687d132fe29051dca629d164e2c4958ba141d5f4133a33f0688f\meta.json: The system cannot find the path specified.
+-- Enter Load Balancer Start IP: 192.168.49.100
+-- Enter Load Balancer End IP: 192.168.49.120
+    ▪ Using image quay.io/metallb/speaker:v0.9.6
+    ▪ Using image quay.io/metallb/controller:v0.9.6
+✅  metallb was successfully configured
+
+
+╭─  󱑍 14:27    devtopc   kubernetes-training-20240131\kubernetes    master !+
+╰─ kubectl delete -f 004-services-lb
+service "nginx-deployment-svc" deleted
+deployment.apps "nginx-deployment" deleted
+
+╭─  󱑍 14:28    devtopc   kubernetes-training-20240131\kubernetes    master !+
+╰─ kubectl get all
+NAME            READY   STATUS    RESTARTS   AGE
+pod/nginx-pod   1/1     Running   0          4h54m
+
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   17h
+
+╭─  󱑍 14:29    devtopc   kubernetes-training-20240131\kubernetes    master !+
+╰─ kubectl apply -f 004-services-lb
+service/nginx-deployment-svc created
+deployment.apps/nginx-deployment created
+
+╭─  󱑍 14:29    devtopc   kubernetes-training-20240131\kubernetes    master !+
+╰─ kubectl get all
+NAME                                    READY   STATUS    RESTARTS   AGE
+pod/nginx-deployment-55bfcb975f-56ltn   1/1     Running   0          3s
+pod/nginx-deployment-55bfcb975f-7cmqg   1/1     Running   0          3s
+pod/nginx-deployment-55bfcb975f-pggcj   1/1     Running   0          3s
+pod/nginx-pod                           1/1     Running   0          4h54m
+
+NAME                           TYPE           CLUSTER-IP      EXTERNAL-IP      PORT(S)        AGE
+service/kubernetes             ClusterIP      10.96.0.1       <none>           443/TCP        17h
+service/nginx-deployment-svc   LoadBalancer   10.103.224.36   192.168.49.100   80:30635/TCP   4s
+
+NAME                               READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/nginx-deployment   3/3     3            3           4s
+
+NAME                                          DESIRED   CURRENT   READY   AGE
+replicaset.apps/nginx-deployment-55bfcb975f   3         3         3       4s

@@ -40,4 +40,4 @@ kubectl rollout history deployment nginx-deployment --revision=3
 kubectl get ep
 kubectl get endpoints
 
- minikube service nginx-deployment-svc --url
+minikube service nginx-deployment-svc --url
