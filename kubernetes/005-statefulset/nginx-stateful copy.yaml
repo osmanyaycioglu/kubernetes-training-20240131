@@ -40,6 +40,15 @@ spec:
           - name: www
             mountPath: /usr/share/nginx/html              
       restartPolicy: Always
+  volumeClaimTemplates:
+  - metadata:
+      name: www
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: "manual"
+      resources:
+        requests:
+          storage: 1Gi
 ---
 apiVersion: v1
 kind: Service
